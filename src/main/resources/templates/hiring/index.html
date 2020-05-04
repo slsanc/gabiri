@@ -4,13 +4,27 @@
 <head>
     <meta charset="UTF-8" />
     <title>Gabiri</title>
-
+    <style> table, th, td {border: 1px double black;} </style>
 </head>
-<img>
-<h1 id = "toptext">Welcome to Gabiri Hiring Manager!</h1>
-<img th:src = "@{/images/mountain_icon.jpg}"/>
 
-<script>
-</script>
+<h1>Currently Open Positions:</h1>
+
+
+<table>
+    <tr>
+        <th>Position Title</th>
+        <th>Max Salary</th>
+        <th>City</th>
+        <th>State or Provence</th>
+    </tr>
+    <tr th:each="position: ${positionsList}">
+        <td th:text = "${position.positionTitle}"></td>
+        <td th:text = "${position.maxSalary}"></td>
+        <td th:text = "${position.city}"></td>
+        <td th:text = "${position.stateOrProvence}"></td>
+    </tr>
+</table>
+
+<a href = "/hiring/newopenposition">Click Here to Create a New Open Position!</a>
 </body>
 </html>

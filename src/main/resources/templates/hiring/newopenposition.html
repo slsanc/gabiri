@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body style = "background-color: #969eac">
+
+<h1>Add an Open Position!</h1>
+
+<form  th:action="@{/hiring/newopenposition}" th:object="${position}" method = "post">
+    <label>Position Title *</label>
+    <input type = "text"  maxlength = "45" th:field="${position.positionTitle}" required/>
+
+    <br/>
+
+    <label>Max Salary</label>
+    <input type = "number"  max="16777215" th:field="${position.maxSalary}"/>
+
+    <br/>
+
+    <label>City</label>
+    <input type = "text"  maxlength = "20" th:field="${position.city}"/>
+
+    <br/>
+
+    <label>State or Provence</label>
+    <input type = "text"  maxlength = "20" th:field="${position.stateOrProvence}"/>
+    <input type = "submit"/>
+</form>
+
+<p>* asterisks indicate required fields.</p>
+</body>
+</html>
