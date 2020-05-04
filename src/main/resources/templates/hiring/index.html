@@ -12,16 +12,24 @@
 
 <table>
     <tr>
+        <th>Position ID</th>
         <th>Position Title</th>
         <th>Max Salary</th>
+        <th>Max Wage</th>
         <th>City</th>
         <th>State or Provence</th>
+        <th>Employment Type</th>
+        <th>Start Date</th>
     </tr>
     <tr th:each="position: ${positionsList}">
+        <td th:text = "${position.positionId}"></td>
         <td th:text = "${position.positionTitle}"></td>
         <td th:text = "${position.maxSalary}"></td>
+        <td th:text = "${position.maxWage}"></td>
         <td th:text = "${position.city}"></td>
         <td th:text = "${position.stateOrProvence}"></td>
+        <td th:text = "${position.employmentType}"></td>
+        <td th:text = "${position.startDate}"></td>
     </tr>
 </table>
 

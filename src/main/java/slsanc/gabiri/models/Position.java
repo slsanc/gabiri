@@ -2,15 +2,15 @@ package slsanc.gabiri.models;
 
 import org.springframework.data.annotation.Id;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Table;
 import java.sql.Date;
 
 
 public class Position {
 
-    public Position() {}
-
-    @Id int positionId;
+    @Id @GeneratedValue int positionId;
     private String positionTitle;
     int departmentId;
     int employmentType;
@@ -109,4 +109,6 @@ public class Position {
     public void setDateFilled(Date dateFilled) {
         this.dateFilled = dateFilled;
     }
-}
+
+    public Position() {}
+    }

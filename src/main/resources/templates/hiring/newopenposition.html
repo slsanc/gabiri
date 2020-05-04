@@ -14,8 +14,55 @@
 
     <br/>
 
+    <fieldset id="group1">
+        <legend>Employment Type:</legend>
+
+        <label>Full Time Salaried</label>
+        <input type="radio" value="1" name="group1" th:field="${position.employmentType}"
+               onclick="document.getElementById('maxSalary').disabled = false;
+               document.getElementById('maxWage').disabled = true;"/>
+        <br/>
+
+        <label>Full Time Wage-Based</label>
+        <input type="radio" value="2" name="group1" th:field="${position.employmentType}"
+               onclick="document.getElementById('maxSalary').disabled = true;
+               document.getElementById('maxWage').disabled = false;"/>
+        <br/>
+
+        <label>Part Time Wage-Based</label>
+        <input type="radio" value="3" name="group1" th:field="${position.employmentType}"
+               onclick="document.getElementById('maxSalary').disabled = true;
+               document.getElementById('maxWage').disabled = false;"/>
+        <br/>
+
+        <label>Independent Contractor</label>
+        <input type="radio" value="4" name="group1" th:field="${position.employmentType}"
+               onclick="document.getElementById('maxSalary').disabled = true;
+               document.getElementById('maxWage').disabled = false;"/>
+        <br/>
+
+        <label>Freelancer</label>
+        <input type="radio" value="5" name="group1" th:field="${position.employmentType}"
+               onclick="document.getElementById('maxSalary').disabled = true;
+               document.getElementById('maxWage').disabled = false;"/>
+        <br/>
+
+        <label>Other</label>
+        <input type="radio" value="6" name="group1" th:field="${position.employmentType}"
+               onclick="document.getElementById('maxSalary').disabled = true;
+               document.getElementById('maxWage').disabled = true;"/>
+        <br/>
+
+    </fieldset>
+
+    <br/>
+
     <label>Max Salary</label>
-    <input type = "number"  max="16777215" th:field="${position.maxSalary}"/>
+    <input id="maxSalary" type = "number"  max="16777215" th:field="${position.maxSalary}" disabled/>
+
+    <br/>
+    <label>Max Wage</label>
+    <input id="maxWage" type = "number"  max="999.99", step = ".01" th:field="${position.maxWage}" disabled/>
 
     <br/>
 
@@ -26,7 +73,16 @@
 
     <label>State or Provence</label>
     <input type = "text"  maxlength = "20" th:field="${position.stateOrProvence}"/>
+
+    <br/>
+
+    <label>Start Date</label>
+    <input type = "date" th:field="${position.startDate}"/>
+
+    <br/>
+
     <input type = "submit"/>
+
 </form>
 
 <p>* asterisks indicate required fields.</p>
