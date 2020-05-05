@@ -2,27 +2,19 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
+-- -----------------------------------------------------
+-- Schema gabiri
+-- -----------------------------------------------------
 
-DROP SCHEMA IF EXISTS `gabiri` ;
-
-
+-- -----------------------------------------------------
+-- Schema gabiri
+-- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `gabiri` DEFAULT CHARACTER SET utf8 ;
 USE `gabiri` ;
 
-
-DROP TABLE IF EXISTS `gabiri`.`Employee_Performance_Notes` ;
-
-CREATE TABLE IF NOT EXISTS `gabiri`.`Employee_Performance_Notes` (
-  `note_id` VARCHAR(45) NOT NULL,
-  `employee_id` INT NOT NULL,
-  `date` DATE NOT NULL,
-  `performance_notes` TEXT NOT NULL,
-  PRIMARY KEY (`note_id`))
-ENGINE = InnoDB;
-
-
-DROP TABLE IF EXISTS `gabiri`.`Departments` ;
-
+-- -----------------------------------------------------
+-- Table `gabiri`.`Departments`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `gabiri`.`Departments` (
   `department_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `department_name` VARCHAR(45) NULL,
@@ -30,9 +22,9 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Departments` (
 ENGINE = InnoDB;
 
 
-
-DROP TABLE IF EXISTS `gabiri`.`Employment_Types` ;
-
+-- -----------------------------------------------------
+-- Table `gabiri`.`Employment_Types`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `gabiri`.`Employment_Types` (
   `employment_type_id` TINYINT UNSIGNED NOT NULL,
   `employment_type` VARCHAR(45) NOT NULL,
@@ -42,9 +34,10 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Employment_Types` (
 ENGINE = InnoDB;
 
 
-DROP TABLE IF EXISTS `gabiri`.`Open_Positions` ;
-
-CREATE TABLE IF NOT EXISTS `gabiri`.`Open_Positions` (
+-- -----------------------------------------------------
+-- Table `gabiri`.`Positions`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `gabiri`.`Positions` (
   `position_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `position_title` VARCHAR(45) NOT NULL,
   `department_id` INT UNSIGNED NULL,
@@ -73,9 +66,9 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Open_Positions` (
 ENGINE = InnoDB;
 
 
-
-DROP TABLE IF EXISTS `gabiri`.`Applicants` ;
-
+-- -----------------------------------------------------
+-- Table `gabiri`.`Applicants`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `gabiri`.`Applicants` (
   `applicant_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(20) NULL,
@@ -85,9 +78,9 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Applicants` (
 ENGINE = InnoDB;
 
 
-
-DROP TABLE IF EXISTS `gabiri`.`Application_Status_Types` ;
-
+-- -----------------------------------------------------
+-- Table `gabiri`.`Application_Status_Types`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `gabiri`.`Application_Status_Types` (
   `status_id` TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `status_description` VARCHAR(30) NULL,
@@ -96,9 +89,9 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Application_Status_Types` (
 ENGINE = InnoDB;
 
 
-
-DROP TABLE IF EXISTS `gabiri`.`Applications` ;
-
+-- -----------------------------------------------------
+-- Table `gabiri`.`Applications`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `gabiri`.`Applications` (
   `applicant_id` INT UNSIGNED NOT NULL,
   `position_id` INT UNSIGNED NOT NULL,
@@ -111,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Applications` (
   INDEX `FK_applications_statustypes_idx` (`status` ASC) VISIBLE,
   CONSTRAINT `FK_applications_positions`
     FOREIGN KEY (`position_id`)
-    REFERENCES `gabiri`.`Open_Positions` (`position_id`)
+    REFERENCES `gabiri`.`Positions` (`position_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `FK_applications_applicants`

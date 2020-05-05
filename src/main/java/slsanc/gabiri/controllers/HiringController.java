@@ -1,9 +1,10 @@
 package slsanc.gabiri.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import slsanc.gabiri.data.PositionRepository;
 import slsanc.gabiri.models.Position;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,12 +14,13 @@ import java.util.ArrayList;
 @RequestMapping("hiring")
 public class HiringController {
 
-    public ArrayList<Position> positionsList = new ArrayList<>();
+    @Autowired
+    private PositionRepository positionRepository;
 
     @RequestMapping (value = "")
     public String index(Model model) {
-        model.addAttribute("positionsList", positionsList);
-        return "hiring/index";
+        model.addAttribute("positionsList", positionRepository.findAll());
+        return "hiring/hiring";
     }
 
     @GetMapping("newopenposition")
@@ -29,7 +31,7 @@ public class HiringController {
 
     @PostMapping("newopenposition")
     public String NewPositionForm(@ModelAttribute Position position) {
-        positionsList.add(position);
+        positionRepository.save(position);
         return "redirect:";
     }
 

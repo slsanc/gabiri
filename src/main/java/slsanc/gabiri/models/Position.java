@@ -1,26 +1,23 @@
 package slsanc.gabiri.models;
 
-import org.springframework.data.annotation.Id;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
 
-
+@Entity
+@Table(name = "Positions")
 public class Position {
 
-    @Id @GeneratedValue int positionId;
-    private String positionTitle;
-    int departmentId;
-    int employmentType;
-    int maxSalary;
-    int maxWage;
-    String city;
-    String stateOrProvence;
-    Date startDate;
-    Date datePosted;
-    Date dateFilled;
+    @Column(name="position_id") @Id @GeneratedValue(strategy = GenerationType.IDENTITY) int positionId;
+    @Column(name="position_title") private String positionTitle;
+    @Column(name="employment_type") int employmentType;
+    @Column(name="max_salary") int maxSalary;
+    @Column(name="max_wage") int maxWage;
+    @Column(name="city") String city;
+    @Column(name="state_or_provence") String stateOrProvence;
+    @Column(name="start_date") Date startDate;
+    @Column(name="date_posted") Date datePosted;
+    @Column(name="date_filled") Date dateFilled;
 
     public int getPositionId() {
         return positionId;
@@ -36,14 +33,6 @@ public class Position {
 
     public void setPositionTitle(String positionTitle) {
         this.positionTitle = positionTitle;
-    }
-
-    public int getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(int departmentId) {
-        this.departmentId = departmentId;
     }
 
     public int getEmploymentType() {
