@@ -1,9 +1,10 @@
 package slsanc.gabiri.data;
 
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import slsanc.gabiri.models.Position;
+import slsanc.gabiri.models.Applicant;
 
 @Repository
-public interface PositionRepository extends CrudRepository<Position,Integer> {
+public interface ApplicantRepository extends CrudRepository<Applicant,Integer> {
 }

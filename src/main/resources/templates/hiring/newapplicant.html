@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Gabiri Hiring Manager</title>
+</head>
+<body>
+<h1>Enter a New Applicant!</h1>
+
+<form th:action="@{/hiring/newapplicant}" th:object="${applicant}" method="post">
+
+    <label for="firstName">First Name</label>
+    <input id = "firstName" type="text" maxlength="20" th:field="${applicant.firstName}"/>
+
+    <label for="lastName">Last Name</label>
+    <input id = "lastName" type="text" maxlength="30" th:field="${applicant.lastName}"/>
+
+    <input type="submit"/>
+
+</form>
+
+</body>
+</html>

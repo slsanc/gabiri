@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Positions` (
   `city` VARCHAR(20) NULL,
   `state_or_provence` VARCHAR(20) NULL,
   `start_date` DATE NULL,
-  `date_posted` DATE NULL,
+  `date_created` DATE NULL,
   `date_filled` DATE NULL,
   PRIMARY KEY (`position_id`),
   UNIQUE INDEX `position_id_UNIQUE` (`position_id` ASC) VISIBLE,

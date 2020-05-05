@@ -2,6 +2,7 @@ package slsanc.gabiri.models;
 
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.sql.Date;
 
 @Entity
@@ -10,13 +11,13 @@ public class Position {
 
     @Column(name="position_id") @Id @GeneratedValue(strategy = GenerationType.IDENTITY) int positionId;
     @Column(name="position_title") private String positionTitle;
-    @Column(name="employment_type") int employmentType;
-    @Column(name="max_salary") int maxSalary;
-    @Column(name="max_wage") int maxWage;
+    @Column(name="employment_type") private int employmentType;
+    @Column(name="max_salary") private int maxSalary;
+    @Column(name="max_wage") BigDecimal maxWage;
     @Column(name="city") String city;
     @Column(name="state_or_provence") String stateOrProvence;
     @Column(name="start_date") Date startDate;
-    @Column(name="date_posted") Date datePosted;
+    @Column(name="date_created") Date dateCreated;
     @Column(name="date_filled") Date dateFilled;
 
     public int getPositionId() {
@@ -51,11 +52,11 @@ public class Position {
         this.maxSalary = maxSalary;
     }
 
-    public int getMaxWage() {
+    public BigDecimal getMaxWage() {
         return maxWage;
     }
 
-    public void setMaxWage(int maxWage) {
+    public void setMaxWage(BigDecimal maxWage) {
         this.maxWage = maxWage;
     }
 
@@ -84,11 +85,11 @@ public class Position {
     }
 
     public Date getDatePosted() {
-        return datePosted;
+        return dateCreated;
     }
 
-    public void setDatePosted(Date datePosted) {
-        this.datePosted = datePosted;
+    public void setDateCreated(Date datePosted) {
+        this.dateCreated = datePosted;
     }
 
     public Date getDateFilled() {
