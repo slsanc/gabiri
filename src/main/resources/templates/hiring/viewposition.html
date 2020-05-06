@@ -5,12 +5,17 @@
 <nav th:replace="fragments :: hiringHeader"></nav>
 
 <h1 th:text="|You are viewing position ${position.positionId} - ${position.positionTitle}|"></h1>
+
 <h1>Here are the applicants to this position:</h1>
 
 <form>
-
-
     <input type="submit" value="Fill this position with the selected applicant"/>
 </form>
+
+<form th:action="@{/hiring/considernewapplicants}" method="post">
+    <input type="hidden" name="positionId" th:value="${position.positionId}">
+    <input type="submit" value="Consider new applicants for this position!"/>
+</form>
+
 </body>
 </html>

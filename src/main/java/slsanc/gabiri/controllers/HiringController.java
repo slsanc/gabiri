@@ -40,6 +40,15 @@ public class HiringController {
         return "hiring/viewposition";
     }
 
+    @PostMapping (value = "considernewapplicants")
+    public String processConsiderNewApplicants(HttpServletRequest httpServletRequest, Model model) {
+        int positionId = Integer.parseInt(httpServletRequest.getParameter("positionId"));
+        model.addAttribute("positionId",positionId);
+        model.addAttribute("applicantIterable",applicantRepository.findAll());
+        return "hiring/considernewapplicants";
+    }
+
+
     @GetMapping("newopenposition")
     public String displayNewPositionForm(Model model) {
         model.addAttribute("position", new Position());

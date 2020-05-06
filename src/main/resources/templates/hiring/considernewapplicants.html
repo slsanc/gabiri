@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+</head>
+<body>
+<nav th:replace="fragments :: hiringHeader"></nav>
+
+<form>
+<table>
+    <h1 th:text="|Select an one or more applicants,
+     then click O.K. to add them to consideration for job ${positionId}|"></h1>
+    <tr>
+        <th></th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Resume</th>
+    </tr>
+
+    <tr th:each="applicant:${applicantIterable}">
+        <td><input type="checkbox" value="${applicant.applicantId}"/></td>
+        <td th:text="${applicant.firstName}"></td>
+        <td th:text="${applicant.lastName}"></td>
+        <td></td>
+    </tr>
+</table>
+</form>
+
+</body>
+</html>
