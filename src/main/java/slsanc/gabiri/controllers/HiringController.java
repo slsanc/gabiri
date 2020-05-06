@@ -22,6 +22,11 @@ public class HiringController {
     @Autowired
     private ApplicantRepository applicantRepository;
 
+    @GetMapping (value = "")
+    public String displayIndex(Model model) {
+        return "hiring/hiring";
+    }
+
     @GetMapping (value = "positions")
     public String displayPositions(Model model) {
         model.addAttribute("positionsList", positionRepository.findAll());
@@ -37,7 +42,7 @@ public class HiringController {
     @PostMapping("newopenposition")
     public String processNewPositionForm(@ModelAttribute Position position) {
         positionRepository.save(position);
-        return "redirect:";
+        return "redirect:/hiring/positions";
     }
 
     @GetMapping (value = "applicants")

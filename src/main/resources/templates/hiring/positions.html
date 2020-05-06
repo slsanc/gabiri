@@ -1,16 +1,13 @@
 <!DOCTYPE html>
-<html lang = "en" xmlns:th="http://www.thymeleaf.org/">
-<body style = "background-color: #969eac">
-<head>
-    <meta charset="UTF-8" />
-    <title>Gabiri Hiring Manager</title>
-    <style> table, th, td {border: 1px double black;} </style>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<nav th:replace="fragments :: hiringHeader"></nav>
 
 <h1>Currently Open Positions:</h1>
 
 
-<table>
+<table th:if="${positionsList.size()}>0">
     <tr>
         <th>Position ID</th>
         <th>Position Title</th>
@@ -33,9 +30,11 @@
     </tr>
 </table>
 
+<br/>
+<div>
 <a href = "/hiring/newapplicant">Click Here to Enter a New Applicant!</a>
-
 <a href = "/hiring/newopenposition">Click Here to Create a New Open Position!</a>
+</div>
 
 </body>
 </html>
