@@ -33,6 +33,13 @@ public class HiringController {
         return "hiring/positions";
     }
 
+    @PostMapping (value = "positions")
+    public String processPositions(HttpServletRequest httpServletRequest, Model model) {
+        int positionId = Integer.parseInt(httpServletRequest.getParameter("positionId"));
+        model.addAttribute("position",positionRepository.findById(positionId).get());
+        return "hiring/viewposition";
+    }
+
     @GetMapping("newopenposition")
     public String displayNewPositionForm(Model model) {
         model.addAttribute("position", new Position());

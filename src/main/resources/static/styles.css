@@ -11,6 +11,10 @@ body a{
     text-decoration: none;
 }
 
+table, th, td {
+  border: 1px solid black;
+}
+
 .navbar {
     overflow: hidden;
     background-color: #036;

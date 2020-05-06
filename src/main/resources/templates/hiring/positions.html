@@ -19,7 +19,14 @@
         <th>Start Date</th>
     </tr>
     <tr th:each="position: ${positionsList}">
-        <td th:text = "${position.positionId}"></td>
+
+        <td>
+            <form th:action="@{/hiring/positions}" method="post">
+                <input type="hidden" name="positionId" th:value="${position.positionId}"/>
+                <input type="submit" th:value="${position.positionId}"/>
+            </form>
+        </td>
+
         <td th:text = "${position.positionTitle}"></td>
         <td th:text = "${position.maxSalary}"></td>
         <td th:text = "${position.maxWage}"></td>
@@ -30,7 +37,12 @@
     </tr>
 </table>
 
+<h2 th:unless="${positionsList.size()}>0">No currently open positions!</h2>
+
 <br/>
+<br/>
+<br/>
+
 <div>
 <a href = "/hiring/newapplicant">Click Here to Enter a New Applicant!</a>
 <a href = "/hiring/newopenposition">Click Here to Create a New Open Position!</a>
