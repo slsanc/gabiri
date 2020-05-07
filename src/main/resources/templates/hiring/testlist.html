@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<nav th:replace="fragments :: hiringHeader"></nav>
+
+<ul>
+    <li th:unless="${applicantIdList}">:(</li>
+    <li th:each="id: ${applicantIdList}" th:text="${id}"></li>
+</ul>
+
+</body>
+</html>

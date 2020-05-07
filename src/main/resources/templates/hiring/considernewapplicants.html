@@ -5,24 +5,38 @@
 <body>
 <nav th:replace="fragments :: hiringHeader"></nav>
 
-<form>
+<h1 th:text="|Select an one or more applicants,
+     then click O.K. to add them to consideration for job ${idList.id}|"></h1>
+
+<!-- The following form takes in an object of the type "IdList" and fills up idList.idList
+(which is of type ArrayList<Integer>) with the applicants that the user wishes to add for consideration to the open
+position. It also takes the position ID (which is stored in idList.id, which is of type int) and re-enters it into that
+same location, so it stays stored there when the form is submitted. The fact that idList contains both the position ID
+and the list of applicant IDs models the many-to-one relationship of applicants to positions. -->
+
+<form th:action="@{/hiring/addapplicanttoposition}" th:object="${idList}" method="post">
+
 <table>
-    <h1 th:text="|Select an one or more applicants,
-     then click O.K. to add them to consideration for job ${positionId}|"></h1>
     <tr>
         <th></th>
+        <th>Applicant ID</th>
         <th>First Name</th>
         <th>Last Name</th>
         <th>Resume</th>
     </tr>
-
     <tr th:each="applicant:${applicantIterable}">
-        <td><input type="checkbox" value="${applicant.applicantId}"/></td>
+        <td>
+            <input type="checkbox" th:value="${applicant.applicantId}" th:field="${idList.idList}"/>
+        </td>
+        <td th:text="${applicant.applicantId}"></td>
         <td th:text="${applicant.firstName}"></td>
         <td th:text="${applicant.lastName}"></td>
         <td></td>
     </tr>
 </table>
+
+    <input type="hidden" th:value="${idList.id}" th:field="${idList.id}"/>
+    <input type="submit" value="O.K."/>
 </form>
 
 </body>
