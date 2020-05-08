@@ -36,9 +36,19 @@
 
 <h1 th:unless="${applicantsForThisPosition.size()} > 0">No applicants to this position yet!</h1>
 
+<br/>
+
 <form th:action="@{/hiring/considernewapplicants}" method="post">
     <input type="hidden" name="positionId" th:value="${position.positionId}">
     <input type="submit" value="Consider new applicants for this position!"/>
+</form>
+
+<br/>
+
+<form onsubmit="return confirm('Do you really want to delete this position? There is no way to undo this.');"
+      th:action="@{/hiring/deleteposition}" method="post" >
+    <input type="hidden" name="positionId" th:value="${position.positionId}">
+    <input type="submit" value="Delete this position"/>
 </form>
 
 </body>

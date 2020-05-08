@@ -79,6 +79,11 @@ public class HiringController {
         return "hiring/viewposition";
     }
 
+    @PostMapping (value = "deleteposition")
+    public String deleteposition(@RequestParam int positionId){
+        positionRepository.deleteById(positionId);
+        return "redirect:/hiring/positions";
+    }
 
     @PostMapping (value = "considernewapplicants")
     /* This bit handles when the user clicks "consider new applicants for this position"
@@ -105,7 +110,7 @@ public class HiringController {
 
         for (Integer i : idList.getIdList())
         {
-            application.setApplicantId(i.intValue());
+            application.setApplicantId(i);
             application.setDateApplied(Date.valueOf(LocalDate.now()));
             application.setStatus(1);
             applicationRepository.save(application);
@@ -128,7 +133,7 @@ public class HiringController {
     @GetMapping (value = "filledpositions")
     public String displayFilledPositions(Model model){
 
-        HashMap<Position , Applicant> hashMap = new HashMap<Position , Applicant>();
+        HashMap<Position , Applicant> hashMap = new HashMap<>();
         Applicant applicant;
 
         for (Position position : positionRepository.filledPositions())

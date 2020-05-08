@@ -4,38 +4,42 @@
 <body>
 <nav th:replace="fragments :: hiringHeader"></nav>
 
-<h1>Currently Open Positions:</h1>
+<div th:if="${positionsList.size()}>0">
+    <h1>Currently Open Positions:</h1>
 
+    <table>
+        <tr>
+            <th></th>
+            <th>Position ID</th>
+            <th>Position Title</th>
+            <th>Max Salary</th>
+            <th>Max Wage</th>
+            <th>City</th>
+            <th>State or Provence</th>
+            <th>Employment Type</th>
+            <th>Start Date</th>
+        </tr>
+        <tr th:each="position: ${positionsList}">
 
-<table th:if="${positionsList.size()}>0">
-    <tr>
-        <th>Position ID</th>
-        <th>Position Title</th>
-        <th>Max Salary</th>
-        <th>Max Wage</th>
-        <th>City</th>
-        <th>State or Provence</th>
-        <th>Employment Type</th>
-        <th>Start Date</th>
-    </tr>
-    <tr th:each="position: ${positionsList}">
+            <td>
+                <form th:action="@{/hiring/positions}" method="post">
+                    <input type="hidden" name="positionId" th:value="${position.positionId}"/>
+                    <input type="submit" value="see applicants"/>
+                </form>
+            </td>
 
-        <td>
-            <form th:action="@{/hiring/positions}" method="post">
-                <input type="hidden" name="positionId" th:value="${position.positionId}"/>
-                <input type="submit" th:value="${position.positionId}"/>
-            </form>
-        </td>
+            <td th:text = "${position.positionId}"></td>
+            <td th:text = "${position.positionTitle}"></td>
+            <td th:text = "${position.maxSalary}"></td>
+            <td th:text = "${position.maxWage}"></td>
+            <td th:text = "${position.city}"></td>
+            <td th:text = "${position.stateOrProvence}"></td>
+            <td th:text = "${position.employmentType}"></td>
+            <td th:text = "${position.startDate}"></td>
+        </tr>
+    </table>
+</div>
 
-        <td th:text = "${position.positionTitle}"></td>
-        <td th:text = "${position.maxSalary}"></td>
-        <td th:text = "${position.maxWage}"></td>
-        <td th:text = "${position.city}"></td>
-        <td th:text = "${position.stateOrProvence}"></td>
-        <td th:text = "${position.employmentType}"></td>
-        <td th:text = "${position.startDate}"></td>
-    </tr>
-</table>
 
 <h2 th:unless="${positionsList.size()}>0">No currently open positions!</h2>
 
