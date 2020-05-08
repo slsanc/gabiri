@@ -8,15 +8,24 @@
 
 <h1>Enter a New Applicant!</h1>
 
-<form th:action="@{/hiring/newapplicant}" th:object="${applicant}" method="post">
+<form th:action="@{/hiring/newapplicant}" method="post" enctype="multipart/form-data">
 
     <label for="firstName">First Name</label>
-    <input id = "firstName" type="text" maxlength="20" th:field="${applicant.firstName}"/>
+    <input id = "firstName" type="text" maxlength="20" name="firstName"/>
 
     <br/>
 
     <label for="lastName">Last Name</label>
-    <input id = "lastName" type="text" maxlength="30" th:field="${applicant.lastName}"/>
+    <input id = "lastName" type="text" maxlength="30" name="lastName"/>
+
+    <br/>
+    <br/>
+
+    <label for="files">Upload Resume or other Relevant Files (max 256 KB)</label>
+
+    <br/>
+
+    <input id = "files" type="file" name="files"/>
 
     <br/>
 

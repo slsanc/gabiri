@@ -1,20 +1,21 @@
 package slsanc.gabiri.controllers;
 
 import org.apache.tomcat.jni.Local;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import slsanc.gabiri.data.ApplicantRepository;
 import slsanc.gabiri.data.ApplicationRepository;
+import slsanc.gabiri.data.DocumentRepository;
 import slsanc.gabiri.data.PositionRepository;
-import slsanc.gabiri.models.Applicant;
-import slsanc.gabiri.models.Application;
-import slsanc.gabiri.models.IdList;
-import slsanc.gabiri.models.Position;
+import slsanc.gabiri.models.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.sql.Blob;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,8 +36,11 @@ public class HiringController {
     @Autowired
     private ApplicationRepository applicationRepository;
 
+    @Autowired
+    private DocumentRepository documentRepository;
 
-    @GetMapping (value = "")
+
+    @GetMapping ("")
     public String displayIndex(Model model) {
         return "hiring/hiring";
     }
@@ -56,7 +60,7 @@ public class HiringController {
     }
 
 
-    @GetMapping (value = "positions")
+    @GetMapping ("positions")
     public String displayPositions(Model model) {
         /* this next line feeds a list of open positions into the model. */
         model.addAttribute("positionsList", positionRepository.openPositions());
@@ -64,7 +68,7 @@ public class HiringController {
     }
 
 
-    @PostMapping (value = "positions")
+    @PostMapping ("positions")
     /* This bit handles when the user clicks on a position in the list of positions. It shows them a page containing
     information about that particular position, as well as a list of applicants who have applied to that position.*/
     public String processPositions(@RequestParam int positionId, Model model) {
@@ -77,13 +81,13 @@ public class HiringController {
         return "hiring/viewposition";
     }
 
-    @PostMapping (value = "deleteposition")
+    @PostMapping ("deleteposition")
     public String deleteposition(@RequestParam int positionId){
         positionRepository.deleteById(positionId);
         return "redirect:/hiring/positions";
     }
 
-    @PostMapping (value = "considernewapplicants")
+    @PostMapping ("considernewapplicants")
     /* This bit handles when the user clicks "consider new applicants for this position"
     while viewing an open position's page.*/
     public String processConsiderNewApplicants(HttpServletRequest httpServletRequest, Model model) {
@@ -96,7 +100,7 @@ public class HiringController {
     }
 
 
-    @PostMapping (value = "addapplicanttoposition")
+    @PostMapping ("addapplicanttoposition")
     /* This bit handles when the user clicks "add selected applicants to position" */
     public String processAddApplicantToPosition(@ModelAttribute IdList idList){
 
@@ -117,7 +121,7 @@ public class HiringController {
         return "redirect:/hiring/positions";
     }
 
-    @PostMapping (value = "fillposition")
+    @PostMapping ("fillposition")
     public String fillposition(@ModelAttribute Application application){
 
         positionRepository.fillPosition(application.getPositionId() , Date.valueOf(LocalDate.now()));
@@ -128,7 +132,7 @@ public class HiringController {
     }
 
 
-    @GetMapping (value = "filledpositions")
+    @GetMapping ("filledpositions")
     public String displayFilledPositions(Model model){
 
         HashMap<Position , Applicant> hashMap = new HashMap<>();
@@ -156,20 +160,36 @@ public class HiringController {
 
 
     @PostMapping("newapplicant")
-    public String processNewApplicantForm(@ModelAttribute Applicant applicant) {
+    public String processNewApplicantForm(@RequestParam String firstName , @RequestParam String lastName ,
+                                          @RequestParam MultipartFile[] files) {
+        Applicant applicant = new Applicant(firstName , lastName);
         applicantRepository.save(applicant);
-        return "redirect:/hiring/applicants";
+
+        try{
+            for (MultipartFile file : files) {
+                if(!(file.isEmpty())) {
+                    Document document = new Document(applicant.getApplicantId(), file.getBytes());
+                    documentRepository.save(document);
+                }
+            }
+            return "redirect:/hiring/applicants";
+        }
+        catch (IOException e){
+            return "redirect:/hiring";
+        }
+
+
     }
 
 
-    @GetMapping (value = "applicants")
+    @GetMapping ("applicants")
     public String displayApplicants(Model model) {
         model.addAttribute("applicantsList", applicantRepository.availableApplicants());
         return "hiring/applicants";
     }
 
 
-    @PostMapping (value = "applicants")
+    @PostMapping ("applicants")
     public String processApplicants(@RequestParam int applicantId , Model model){
 
         model.addAttribute("applicant" , applicantRepository.findById(applicantId).get());

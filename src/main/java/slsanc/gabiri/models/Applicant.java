@@ -34,7 +34,13 @@ public class Applicant {
         this.lastName = lastName;
     }
 
+    public Applicant(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public Applicant() {
+
 
     }
 }

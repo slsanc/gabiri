@@ -119,6 +119,22 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Applications` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `gabiri`.`Documents`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `gabiri`.`Documents` (
+  `document_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `applicant_id` INT UNSIGNED NOT NULL,
+  `document` MEDIUMBLOB NOT NULL,
+  PRIMARY KEY (`document_id`),
+  UNIQUE INDEX `document_id_UNIQUE` (`document_id` ASC) VISIBLE,
+  CONSTRAINT `FK_documents_applicants`
+    FOREIGN KEY (`applicant_id`)
+    REFERENCES `gabiri`.`Applicants` (`applicant_id`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT)
+ENGINE = InnoDB;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
