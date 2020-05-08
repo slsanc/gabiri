@@ -21,6 +21,7 @@ USE `gabiri`;
 INSERT IGNORE INTO `gabiri`.`Application_Status_Types` (`status_id`, `status_description`) VALUES (1, 'Under Consideration');
 INSERT IGNORE INTO `gabiri`.`Application_Status_Types` (`status_id`, `status_description`) VALUES (2, 'No Longer Under Consideration');
 INSERT IGNORE INTO `gabiri`.`Application_Status_Types` (`status_id`, `status_description`) VALUES (3, 'Hired');
+INSERT IGNORE INTO `gabiri`.`Application_Status_Types` (`status_id`, `status_description`) VALUES (4, 'Position Completed or Terminated');
 
 COMMIT;
 

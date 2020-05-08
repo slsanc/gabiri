@@ -146,7 +146,7 @@ public class HiringController {
 
     @GetMapping (value = "applicants")
     public String displayApplicants(Model model) {
-        model.addAttribute("applicantsList", applicantRepository.findAll());
+        model.addAttribute("applicantsList", applicantRepository.availableApplicants());
         return "hiring/applicants";
     }
 
