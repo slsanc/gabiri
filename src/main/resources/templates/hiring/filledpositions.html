@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+<nav th:replace="fragments :: hiringHeader"></nav>
+
+<div th:if="${hashMap.size()} > 0">
+<h1>Currently Open Positions:</h1>
+<table>
+    <tr>
+        <th>Position ID</th>
+        <th>Position Title</th>
+        <th>Max Salary</th>
+        <th>Max Wage</th>
+        <th>City</th>
+        <th>State or Provence</th>
+        <th>Employment Type</th>
+        <th>Start Date</th>
+
+        <th>Applicant ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <td>Resume</td>
+
+    </tr>
+    <tr th:each="instance: ${hashMap}">
+
+
+        <td th:text = "${instance.key.positionId}"></td>
+        <td th:text = "${instance.key.positionTitle}"></td>
+        <td th:text = "${instance.key.maxSalary}"></td>
+        <td th:text = "${instance.key.maxWage}"></td>
+        <td th:text = "${instance.key.city}"></td>
+        <td th:text = "${instance.key.stateOrProvence}"></td>
+        <td th:text = "${instance.key.employmentType}"></td>
+        <td th:text = "${instance.key.startDate}"></td>
+
+        <td th:text = "${instance.value.applicantId}"></td>
+        <td th:text = "${instance.value.firstName}"></td>
+        <td th:text = "${instance.value.lastName}"></td>
+        <td></td>
+
+    </tr>
+</table>
+</div>
+
+<h1 th:unless="${hashMap.size()} > 0">No Filled Positions Yet</h1>
+
+</body>
+</html>

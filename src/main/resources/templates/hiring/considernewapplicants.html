@@ -24,7 +24,7 @@ and the list of applicant IDs models the many-to-one relationship of applicants 
         <th>Last Name</th>
         <th>Resume</th>
     </tr>
-    <tr th:each="applicant:${applicantIterable}">
+    <tr th:each="applicant:${applicantsNotYetConsidered}">
         <td>
             <input type="checkbox" th:value="${applicant.applicantId}" th:field="${idList.idList}"/>
         </td>

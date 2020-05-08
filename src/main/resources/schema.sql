@@ -105,13 +105,13 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Applications` (
   CONSTRAINT `FK_applications_positions`
     FOREIGN KEY (`position_id`)
     REFERENCES `gabiri`.`Positions` (`position_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT,
   CONSTRAINT `FK_applications_applicants`
     FOREIGN KEY (`applicant_id`)
     REFERENCES `gabiri`.`Applicants` (`applicant_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT,
   CONSTRAINT `FK_applications_statustypes`
     FOREIGN KEY (`status`)
     REFERENCES `gabiri`.`Application_Status_Types` (`status_id`)
