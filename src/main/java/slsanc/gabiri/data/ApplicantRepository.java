@@ -30,8 +30,8 @@ public interface ApplicantRepository extends JpaRepository<Applicant,Integer> {
     List<Applicant> applicantsNotYetConsidered(@Param("positionId")int positionId);
 
     /* Given a PositionId, the following method returns the applicant who was hired for that position*/
-    @Query(value = "SELECT * FROM Applicants WHERE " +
-            " applicant_id = (SELECT applicant_id FROM Applications WHERE status = 3 AND position_id = :positionId)"
+    @Query(value = "SELECT * FROM Applicants WHERE applicant_id = " +
+            "(SELECT applicant_id FROM Applications WHERE status BETWEEN 3 AND 4 AND position_id = :positionId)"
             , nativeQuery = true)
     Applicant applicantHiredFor(@Param("positionId")int positionId);
 

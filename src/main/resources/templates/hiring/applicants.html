@@ -9,11 +9,20 @@
 <h1>Current Applicants:</h1>
 <table>
     <tr>
+        <th></th>
         <th>Applicant ID</th>
         <th>First Name</th>
         <th>Last Name</th>
     </tr>
     <tr th:each="applicant: ${applicantsList}">
+
+        <td>
+            <form th:action="@{/hiring/applicants}" th:method="post">
+                <input type="hidden" name="applicantId" th:value="${applicant.applicantId}">
+                <input type="submit" value="see applications">
+            </form>
+        </td>
+
         <td th:text = "${applicant.applicantId}"></td>
         <td th:text = "${applicant.firstName}"></td>
         <td th:text = "${applicant.lastName}"></td>

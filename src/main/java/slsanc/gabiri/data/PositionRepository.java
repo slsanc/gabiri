@@ -22,9 +22,19 @@ public interface PositionRepository extends JpaRepository<Position,Integer> {
             , nativeQuery = true)
     List<Position> filledPositions();
 
-    @Transactional
-    @Modifying @Query(value="UPDATE Positions SET date_filled = :now WHERE position_id = :positionId"
+    @Transactional @Modifying @Query(value="UPDATE Positions SET date_filled = :now WHERE position_id = :positionId"
              , nativeQuery = true)
     void fillPosition(@Param("positionId") int positionId, @Param("now") Date now);
+
+
+    @Query(value = "SELECT * FROM POSITIONS WHERE position_id IN " +
+            "(SELECT position_id FROM APPLICATIONS WHERE applicant_id = :applicantId) " +
+            "AND date_filled IS NULL" , nativeQuery = true)
+    List<Position> OpenPositionsThisApplicantHasAppliedFor(@Param("applicantId") int applicantId);
+
+    @Transactional @Modifying @Query(value="DELETE FROM POSITIONS WHERE position_id IN " +
+            "(SELECT position_id FROM APPLICATIONS WHERE applicant_id = :applicantId AND status = 4)"
+            , nativeQuery = true)
+    void deletePositionsThisApplicantWasHiredFor(@Param("applicantId") int applicantId);
 
 }

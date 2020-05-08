@@ -67,9 +67,7 @@ public class HiringController {
     @PostMapping (value = "positions")
     /* This bit handles when the user clicks on a position in the list of positions. It shows them a page containing
     information about that particular position, as well as a list of applicants who have applied to that position.*/
-    public String processPositions(HttpServletRequest httpServletRequest, Model model) {
-
-        int positionId = Integer.parseInt(httpServletRequest.getParameter("positionId"));
+    public String processPositions(@RequestParam int positionId, Model model) {
 
         model.addAttribute("applicantsForThisPosition",
                 applicantRepository.findApplicantsByPositionAppliedfor(positionId));
@@ -149,11 +147,6 @@ public class HiringController {
 
     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-    @GetMapping (value = "applicants")
-    public String displayApplicants(Model model) {
-        model.addAttribute("applicantsList", applicantRepository.availableApplicants());
-        return "hiring/applicants";
-    }
 
     @GetMapping("newapplicant")
     public String displayNewApplicantForm(Model model) {
@@ -161,9 +154,37 @@ public class HiringController {
         return "hiring/newapplicant";
     }
 
+
     @PostMapping("newapplicant")
     public String processNewApplicantForm(@ModelAttribute Applicant applicant) {
         applicantRepository.save(applicant);
+        return "redirect:/hiring/applicants";
+    }
+
+
+    @GetMapping (value = "applicants")
+    public String displayApplicants(Model model) {
+        model.addAttribute("applicantsList", applicantRepository.availableApplicants());
+        return "hiring/applicants";
+    }
+
+
+    @PostMapping (value = "applicants")
+    public String processApplicants(@RequestParam int applicantId , Model model){
+
+        model.addAttribute("applicant" , applicantRepository.findById(applicantId).get());
+        model.addAttribute("positionsList"
+                , positionRepository.OpenPositionsThisApplicantHasAppliedFor(applicantId));
+
+        return "/hiring/viewapplicant";
+    }
+
+    @PostMapping ("deleteapplicant")
+    public String deleteApplicant(@RequestParam int applicantId){
+
+        positionRepository.deletePositionsThisApplicantWasHiredFor(applicantId);
+        applicantRepository.deleteById(applicantId);
+
         return "redirect:/hiring/applicants";
     }
 

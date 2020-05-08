@@ -13,12 +13,12 @@ public class Position {
     @Column(name="position_title") private String positionTitle;
     @Column(name="employment_type") private int employmentType;
     @Column(name="max_salary") private int maxSalary;
-    @Column(name="max_wage") BigDecimal maxWage;
-    @Column(name="city") String city;
-    @Column(name="state_or_provence") String stateOrProvence;
-    @Column(name="start_date") Date startDate;
-    @Column(name="date_created") Date dateCreated;
-    @Column(name="date_filled") Date dateFilled;
+    @Column(name="max_wage") private BigDecimal maxWage;
+    @Column(name="city") private String city;
+    @Column(name="state_or_provence") private String stateOrProvence;
+    @Column(name="start_date") private Date startDate;
+    @Column(name="date_created") private Date dateCreated;
+    @Column(name="date_filled") private Date dateFilled;
 
     public int getPositionId() {
         return positionId;

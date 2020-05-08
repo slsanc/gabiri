@@ -6,9 +6,9 @@ import javax.persistence.*;
 @Table(name="Applicants")
 public class Applicant {
 
-    @Column(name="applicant_id") @Id @GeneratedValue(strategy = GenerationType.IDENTITY) int applicantId;
-    @Column(name="first_name") String firstName;
-    @Column(name="last_name") String lastName;
+    @Column(name="applicant_id") @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private int applicantId;
+    @Column(name="first_name") private String firstName;
+    @Column(name="last_name") private String lastName;
 
     public int getApplicantId() {
         return applicantId;
