@@ -130,8 +130,9 @@ public class HiringController {
     @PostMapping ("fillposition")
     public String fillposition(@ModelAttribute Application application){
 
-        positionRepository.fillPosition(application.getPositionId() , Date.valueOf(LocalDate.now()));
+        positionRepository.setDateFilled(application.getPositionId() , Date.valueOf(LocalDate.now()));
         applicationRepository.changeStatus(application.getApplicantId() , application.getPositionId() , 3);
+        applicationRepository.rejectRunnersUp(application.getPositionId() , application.getApplicantId());
 
         return "redirect:/hiring/positions";
 

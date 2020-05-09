@@ -25,7 +25,7 @@ public interface PositionRepository extends JpaRepository<Position,Integer> {
 
     @Transactional @Modifying @Query(value="UPDATE Positions SET date_filled = :now WHERE position_id = :positionId"
              , nativeQuery = true)
-    void fillPosition(@Param("positionId") int positionId, @Param("now") Date now);
+    void setDateFilled(@Param("positionId") int positionId, @Param("now") Date now);
 
 
     @Query(value = "SELECT * FROM POSITIONS WHERE position_id IN " +

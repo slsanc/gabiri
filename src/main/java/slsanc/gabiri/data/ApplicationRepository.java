@@ -20,4 +20,14 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
     void changeStatus(@Param("applicantId") int applicantId , @Param("positionId") int positionId
             , @Param("newStatus") int newStatus);
 
+
+    /* This query takes in a position ID and the applicant ID of the person who was hired for the position.
+    * It sets the status of the application of all applicants who weren't hired to 2
+    * (meaning 'no longer under consideration). */
+    @Transactional
+    @Modifying
+    @Query(value="UPDATE Applications SET status = 2 WHERE " +
+            "position_id = :positionId AND applicant_id != :applicantId" ,nativeQuery = true)
+    void rejectRunnersUp(@Param("positionId") int positionId , @Param("applicantId") int applicantId);
+
 }
