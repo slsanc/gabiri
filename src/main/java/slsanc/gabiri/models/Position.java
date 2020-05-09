@@ -100,5 +100,11 @@ public class Position {
         this.dateFilled = dateFilled;
     }
 
-    public Position() {}
+    public String employmentTypeAsString(){
+        String[] employmentTypes={"Full Time Salaried", "Full Time Wage-Based", "Part Time Wage-Based", "Independent Contractor",
+                "Freelance", "Other"};
+        return employmentTypes[(employmentType-1)];
+    }
+
+    public Position() {};
     }
