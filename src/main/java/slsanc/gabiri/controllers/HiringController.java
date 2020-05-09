@@ -201,7 +201,8 @@ public class HiringController {
         model.addAttribute("applicant" , applicantRepository.findById(applicantId).get());
         model.addAttribute("positionsList"
                 , positionRepository.OpenPositionsThisApplicantHasAppliedFor(applicantId));
-        model.addAttribute("documentIdList" , documentRepository.thisApplicantsDocuments(applicantId));
+        model.addAttribute("documentIdsAndNames"
+                , documentRepository.thisApplicantsDocumentIdsAndNames(applicantId));
 
 
         return "/hiring/viewapplicant";
@@ -249,10 +250,15 @@ public class HiringController {
     public String deleteDocument(HttpServletRequest httpServletRequest , Model model)
     {
         int documentId = Integer.parseInt(httpServletRequest.getParameter("documentId"));
+        int applicantId = Integer.parseInt(httpServletRequest.getParameter("applicantId"));
 
         documentRepository.deleteById(documentId);
 
-        model.addAttribute("applicantId",Integer.parseInt(httpServletRequest.getParameter("applicantId")));
+        model.addAttribute("applicant" , applicantRepository.findById(applicantId).get());
+        model.addAttribute("positionsList"
+                , positionRepository.OpenPositionsThisApplicantHasAppliedFor(applicantId));
+        model.addAttribute("documentIdsAndNames"
+                , documentRepository.thisApplicantsDocumentIdsAndNames(applicantId));
 
         return "/hiring/viewapplicant";
     }
