@@ -34,7 +34,7 @@ public interface PositionRepository extends JpaRepository<Position,Integer> {
     List<Position> OpenPositionsThisApplicantHasAppliedFor(@Param("applicantId") int applicantId);
 
     @Transactional @Modifying @Query(value="DELETE FROM POSITIONS WHERE position_id IN " +
-            "(SELECT position_id FROM APPLICATIONS WHERE applicant_id = :applicantId AND status = 4)"
+            "(SELECT position_id FROM APPLICATIONS WHERE applicant_id = :applicantId AND status BETWEEN 3 AND 4)"
             , nativeQuery = true)
     void deletePositionsThisApplicantWasHiredFor(@Param("applicantId") int applicantId);
 

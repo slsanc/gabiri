@@ -3,6 +3,7 @@ package slsanc.gabiri.models;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.File;
 import java.sql.Blob;
 
 @Entity
@@ -11,7 +12,8 @@ public class Document {
 
     @Column(name="document_id") @Id @GeneratedValue(strategy = GenerationType.IDENTITY)  private int documentId;
     @Column(name="applicant_id") private int applicantId;
-    @Column(name="document") @Lob private byte[] document;
+    @Column(name="file_name") private String fileName;
+    @Column(name="document_data") @Lob private byte[] documentData;
 
     public int getDocumentId() {
         return documentId;
@@ -29,17 +31,26 @@ public class Document {
         this.applicantId = applicantId;
     }
 
-    public byte[] getDocument() {
-        return document;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setDocument(byte[] document) {
-        this.document = document;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
-    public Document(int applicantId, byte[] document) {
+    public byte[] getDocumentData() {
+        return documentData;
+    }
+
+    public void setDocumentData(byte[] documentData) {
+        this.documentData = documentData;
+    }
+
+    public Document(int applicantId, String fileName, byte[] documentData) {
         this.applicantId = applicantId;
-        this.document = document;
+        this.fileName = fileName;
+        this.documentData = documentData;
     }
 
     public Document() {

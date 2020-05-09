@@ -3,6 +3,8 @@ package slsanc.gabiri.controllers;
 import org.apache.tomcat.jni.Local;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import slsanc.gabiri.data.PositionRepository;
 import slsanc.gabiri.models.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.Date;
@@ -72,6 +75,9 @@ public class HiringController {
     /* This bit handles when the user clicks on a position in the list of positions. It shows them a page containing
     information about that particular position, as well as a list of applicants who have applied to that position.*/
     public String processPositions(@RequestParam int positionId, Model model) {
+
+
+
 
         model.addAttribute("applicantsForThisPosition",
                 applicantRepository.findApplicantsByPositionAppliedfor(positionId));
@@ -140,6 +146,7 @@ public class HiringController {
 
         for (Position position : positionRepository.filledPositions())
         {
+            System.out.println(position.getPositionId());
             applicant = applicantRepository.applicantHiredFor(position.getPositionId());
             hashMap.put(position,applicant);
         }
@@ -165,20 +172,18 @@ public class HiringController {
         Applicant applicant = new Applicant(firstName , lastName);
         applicantRepository.save(applicant);
 
-        try{
-            for (MultipartFile file : files) {
-                if(!(file.isEmpty())) {
-                    Document document = new Document(applicant.getApplicantId(), file.getBytes());
+        for(MultipartFile file:files) {
+            try {
+                if (!(file.isEmpty())) {
+                    Document document = new Document(applicant.getApplicantId(),
+                            file.getOriginalFilename(), file.getBytes());
                     documentRepository.save(document);
                 }
+            } catch (IOException e) {
+                return "redirect:/hiring";
             }
-            return "redirect:/hiring/applicants";
         }
-        catch (IOException e){
-            return "redirect:/hiring";
-        }
-
-
+        return "redirect:/hiring/applicants";
     }
 
 
@@ -192,9 +197,12 @@ public class HiringController {
     @PostMapping ("applicants")
     public String processApplicants(@RequestParam int applicantId , Model model){
 
+
         model.addAttribute("applicant" , applicantRepository.findById(applicantId).get());
         model.addAttribute("positionsList"
                 , positionRepository.OpenPositionsThisApplicantHasAppliedFor(applicantId));
+        model.addAttribute("documentIdList" , documentRepository.thisApplicantsDocuments(applicantId));
+
 
         return "/hiring/viewapplicant";
     }
@@ -203,9 +211,49 @@ public class HiringController {
     public String deleteApplicant(@RequestParam int applicantId){
 
         positionRepository.deletePositionsThisApplicantWasHiredFor(applicantId);
-        applicantRepository.deleteById(applicantId);
 
+        applicantRepository.deleteById(applicantId);
         return "redirect:/hiring/applicants";
     }
 
+    @PostMapping("uploaddocuments")
+    public String uploadDocuments(@RequestParam String applicantId , @RequestParam MultipartFile[] files) {
+
+        for(MultipartFile file:files) {
+            try {
+                if (!(file.isEmpty())) {
+                    Document document = new Document( Integer.parseInt(applicantId),
+                            file.getOriginalFilename(), file.getBytes());
+                    documentRepository.save(document);
+                }
+            } catch (IOException e) {
+                return "redirect:/hiring";
+            }
+        }
+        return "redirect:/hiring/applicants";
+    }
+
+    @PostMapping ("downloaddocument")
+    public ResponseEntity downloadDocument(HttpServletRequest httpServletRequest) {
+
+        int documentId = Integer.parseInt(httpServletRequest.getParameter("documentId"));
+        Document document = documentRepository.findById(documentId).get();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + document.getFileName() + "\"")
+                .body(document.getDocumentData());
+    }
+
+    @PostMapping ("deletedocument")
+    public String deleteDocument(HttpServletRequest httpServletRequest , Model model)
+    {
+        int documentId = Integer.parseInt(httpServletRequest.getParameter("documentId"));
+
+        documentRepository.deleteById(documentId);
+
+        model.addAttribute("applicantId",Integer.parseInt(httpServletRequest.getParameter("applicantId")));
+
+        return "/hiring/viewapplicant";
+    }
 }
