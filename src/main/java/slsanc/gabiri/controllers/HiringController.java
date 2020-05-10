@@ -168,9 +168,8 @@ public class HiringController {
 
 
     @PostMapping("newapplicant")
-    public String processNewApplicantForm(@RequestParam String firstName , @RequestParam String lastName ,
+    public String processNewApplicantForm(@ModelAttribute Applicant applicant,
                                           @RequestParam MultipartFile[] files) {
-        Applicant applicant = new Applicant(firstName , lastName);
         applicantRepository.save(applicant);
 
         for(MultipartFile file:files) {
@@ -196,8 +195,9 @@ public class HiringController {
 
 
     @PostMapping ("applicants")
-    public String processApplicants(@RequestParam int applicantId , Model model){
+    public String processApplicants(HttpServletRequest httpServletRequest, Model model){
 
+        int applicantId = Integer.parseInt(httpServletRequest.getParameter("applicantId"));
 
         model.addAttribute("applicant" , applicantRepository.findById(applicantId).get());
         model.addAttribute("positionsList"

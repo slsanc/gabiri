@@ -13,19 +13,31 @@
         <th>Applicant ID</th>
         <th>First Name</th>
         <th>Last Name</th>
+        <th>Cell Phone</th>
+        <th>Work Phone</th>
+        <th>Home Phone</th>
+        <th>Address</th>
+        <th>City</th>
+        <th>State or Provence</th>
     </tr>
     <tr th:each="applicant: ${applicantsList}">
 
         <td>
             <form th:action="@{/hiring/applicants}" th:method="post">
                 <input type="hidden" name="applicantId" th:value="${applicant.applicantId}">
-                <input type="submit" value="see applications">
+                <input type="submit" value="see profile">
             </form>
         </td>
 
         <td th:text = "${applicant.applicantId}"></td>
         <td th:text = "${applicant.firstName}"></td>
         <td th:text = "${applicant.lastName}"></td>
+        <td th:text="${applicant.cellPhone}"></td>
+        <td th:text="${applicant.workPhone}"></td>
+        <td th:text="${applicant.homePhone}"></td>
+        <td th:text="${applicant.address}"></td>
+        <td th:text="${applicant.city}"></td>
+        <td th:text="${applicant.stateOrProvence}"></td>
     </tr>
 </table>
 </div>

@@ -5,6 +5,35 @@
 <nav th:replace="fragments :: hiringHeader"></nav>
 
 
+<table>
+    <tr>
+        <th>Applicant ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Cell Phone</th>
+        <th>Work Phone</th>
+        <th>Home Phone</th>
+        <th>Address</th>
+        <th>City</th>
+        <th>State or Provence</th>
+    </tr>
+    <tr>
+        <td th:text="${applicant.applicantId}"></td>
+        <td th:text="${applicant.firstName}"></td>
+        <td th:text="${applicant.lastName}"></td>
+        <td th:text="${applicant.cellPhone}"></td>
+        <td th:text="${applicant.workPhone}"></td>
+        <td th:text="${applicant.homePhone}"></td>
+        <td th:text="${applicant.address}"></td>
+        <td th:text="${applicant.city}"></td>
+        <td th:text="${applicant.stateOrProvence}"></td>
+    </tr>
+</table>
+
+<br/>
+<br/>
+<br/>
+
 <div th:if="${positionsList.size()}>0">
     <h1 th:text="|${applicant.firstName} has applied to the following open positions:|"></h1>
 

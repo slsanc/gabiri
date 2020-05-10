@@ -19,12 +19,14 @@
             <th>Applicant ID</th>
             <th>First Name</th>
             <th>Last Name</th>
+
         </tr>
         <tr th:each="applicant:${applicantsForThisPosition}">
             <td><input type="radio" th:value="${applicant.applicantId}" th:name="applicantId"/></td>
             <td th:text="${applicant.applicantId}"></td>
             <td th:text="${applicant.firstName}"></td>
             <td th:text="${applicant.lastName}"></td>
+
         </tr>
     </table>
 

@@ -45,10 +45,11 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Positions` (
   `max_salary` MEDIUMINT UNSIGNED NULL,
   `max_wage` DECIMAL(5,2) NULL,
   `city` VARCHAR(20) NULL,
-  `state_or_provence` VARCHAR(20) NULL,
+  `state_or_provence` VARCHAR(2) NULL,
   `start_date` DATE NULL,
   `date_created` DATE NULL,
   `date_filled` DATE NULL,
+  `date_ended` DATE NULL,
   PRIMARY KEY (`position_id`),
   UNIQUE INDEX `position_id_UNIQUE` (`position_id` ASC) VISIBLE,
   INDEX `FK_positions_departments_idx` (`department_id` ASC) VISIBLE,
@@ -71,8 +72,16 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `gabiri`.`Applicants` (
   `applicant_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(20) NULL,
-  `last_name` VARCHAR(30) NULL,
+  `first_name` VARCHAR(20) NOT NULL,
+  `last_name` VARCHAR(30) NOT NULL,
+  `email` VARCHAR(45) NULL,
+  `cell_phone` VARCHAR(12) NULL,
+  `work_phone` VARCHAR(12) NULL,
+  `home_phone` VARCHAR(12) NULL,
+  `address` VARCHAR(45) NULL,
+  `city` VARCHAR(20) NULL,
+  `state_or_provence` VARCHAR(2) NULL,
+  `hidden_status` TINYINT(1) NULL DEFAULT 0,
   PRIMARY KEY (`applicant_id`),
   UNIQUE INDEX `applicant_id_UNIQUE` (`applicant_id` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -119,6 +128,7 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Applications` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
 -- -----------------------------------------------------
 -- Table `gabiri`.`Documents`
 -- -----------------------------------------------------
@@ -135,12 +145,6 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Documents` (
     ON DELETE CASCADE
     ON UPDATE RESTRICT)
 ENGINE = InnoDB;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

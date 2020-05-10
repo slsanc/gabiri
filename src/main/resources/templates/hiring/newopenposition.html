@@ -57,21 +57,22 @@
     <br/>
 
     <label>Max Salary</label>
-    <input id="maxSalary" type = "number"  max="16777215" th:field="${position.maxSalary}" disabled/>
+    <input id="maxSalary" type = "number" min="0" max="16777215" th:field="${position.maxSalary}" disabled/>
 
     <br/>
     <label>Max Wage</label>
-    <input id="maxWage" type = "number"  max="999.99", step = ".01" th:field="${position.maxWage}" disabled/>
+    <input id="maxWage" type = "number" min="0"  max="999.99", step = ".01" pattern="[^e]+"
+           th:field="${position.maxWage}" disabled/>
 
     <br/>
 
     <label>City</label>
-    <input type = "text"  maxlength = "20" th:field="${position.city}"/>
+    <input type = "text" maxlength = "20" th:field="${position.city}"/>
 
     <br/>
 
-    <label>State or Provence</label>
-    <input type = "text"  maxlength = "20" th:field="${position.stateOrProvence}"/>
+    <label>State or Provence (Two-Letter Abbreviation)</label>
+    <input type = "text"  maxlength = "2" pattern="[A-Za-z]{2}" th:field="${position.stateOrProvence}"/>
 
     <br/>
 
