@@ -7,17 +7,17 @@
 
 <h1>Add an Open Position!</h1>
 
-<form  th:action="@{/hiring/newopenposition}" th:object="${position}" method = "post">
+<form  th:action="@{/newopenposition}" th:object="${position}" method = "post">
     <label>Position Title *</label>
     <input type = "text"  maxlength = "45" th:field="${position.positionTitle}" required/>
 
     <br/>
 
     <fieldset id="group1">
-        <legend>Employment Type:</legend>
+        <legend>Employment Type *</legend>
 
         <label>Full Time Salaried</label>
-        <input type="radio" value="1" name="group1" th:field="${position.employmentType}"
+        <input type="radio" value="1" name="group1" required th:field="${position.employmentType}"
                onclick="document.getElementById('maxSalary').disabled = false;
                document.getElementById('maxWage').disabled = true;"/>
         <br/>

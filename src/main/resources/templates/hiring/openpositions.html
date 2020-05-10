@@ -21,12 +21,7 @@
         </tr>
         <tr th:each="position: ${positionsList}">
 
-            <td>
-                <form th:action="@{/hiring/positions}" method="post">
-                    <input type="hidden" name="positionId" th:value="${position.positionId}"/>
-                    <input type="submit" value="see applicants"/>
-                </form>
-            </td>
+            <td><a th:href="@{'/viewposition/' + ${position.positionId}}">see applicants</a></td>
 
             <td th:text = "${position.positionId}"></td>
             <td th:text = "${position.positionTitle}"></td>
@@ -47,9 +42,8 @@
 <br/>
 <br/>
 
-<div>
-
-<a href = "/hiring/newopenposition">Click Here to Create a New Open Position!</a>
+<div class="buttonlink">
+<a href = "/newopenposition">Click Here to Create a New Open Position!</a>
 </div>
 
 </body>

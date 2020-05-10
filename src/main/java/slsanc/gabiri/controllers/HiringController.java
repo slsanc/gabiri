@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 
 @Controller
-@RequestMapping("hiring")
 public class HiringController {
 
     @Autowired
@@ -45,7 +44,7 @@ public class HiringController {
 
     @GetMapping ("")
     public String displayIndex(Model model) {
-        return "hiring/hiring";
+        return "hiring/index";
     }
 
 
@@ -59,25 +58,20 @@ public class HiringController {
     @PostMapping("newopenposition")
     public String processNewPositionForm(@ModelAttribute Position position) {
         positionRepository.save(position);
-        return "redirect:/hiring/positions";
+        return "redirect:/openpositions";
     }
 
 
-    @GetMapping ("positions")
+    @GetMapping ("openpositions")
     public String displayPositions(Model model) {
         /* this next line feeds a list of open positions into the model. */
         model.addAttribute("positionsList", positionRepository.openPositions());
-        return "hiring/positions";
+        return "hiring/openpositions";
     }
 
 
-    @PostMapping ("positions")
-    /* This bit handles when the user clicks on a position in the list of positions. It shows them a page containing
-    information about that particular position, as well as a list of applicants who have applied to that position.*/
-    public String processPositions(@RequestParam int positionId, Model model) {
-
-
-
+    @GetMapping ("/viewposition/{positionId}")
+    public String processPositions(@PathVariable("positionId") int positionId, Model model) {
 
         model.addAttribute("applicantsForThisPosition",
                 applicantRepository.findApplicantsByPositionAppliedfor(positionId));
@@ -90,15 +84,14 @@ public class HiringController {
     @PostMapping ("deleteposition")
     public String deleteposition(@RequestParam int positionId){
         positionRepository.deleteById(positionId);
-        return "redirect:/hiring/positions";
+        return "redirect:/openpositions";
     }
 
-    @PostMapping ("considernewapplicants")
+    @GetMapping ("considernewapplicants/{positionId}")
     /* This bit handles when the user clicks "consider new applicants for this position"
     while viewing an open position's page.*/
-    public String processConsiderNewApplicants(HttpServletRequest httpServletRequest, Model model) {
+    public String processConsiderNewApplicants(@PathVariable int positionId, Model model) {
 
-        int positionId = Integer.parseInt(httpServletRequest.getParameter("positionId"));
         model.addAttribute("applicantsNotYetConsidered", applicantRepository.applicantsNotYetConsidered(positionId));
         model.addAttribute("idList", new IdList(positionId));
 
@@ -124,7 +117,7 @@ public class HiringController {
             applicationRepository.save(application);
         }
 
-        return "redirect:/hiring/positions";
+        return "redirect:/viewposition/" + application.getPositionId();
     }
 
     @PostMapping ("fillposition")
@@ -134,8 +127,7 @@ public class HiringController {
         applicationRepository.changeStatus(application.getApplicantId() , application.getPositionId() , 3);
         applicationRepository.rejectRunnersUp(application.getPositionId() , application.getApplicantId());
 
-        return "redirect:/hiring/positions";
-
+        return "redirect:/openpositions";
     }
 
 
@@ -180,31 +172,28 @@ public class HiringController {
                     documentRepository.save(document);
                 }
             } catch (IOException e) {
-                return "redirect:/hiring";
+                return "redirect:/";
             }
         }
-        return "redirect:/hiring/applicants";
+        return "redirect:/availableapplicants";
     }
 
 
-    @GetMapping ("applicants")
+    @GetMapping ("availableapplicants")
     public String displayApplicants(Model model) {
         model.addAttribute("applicantsList", applicantRepository.availableApplicants());
-        return "hiring/applicants";
+        return "hiring/availableapplicants";
     }
 
 
-    @PostMapping ("applicants")
-    public String processApplicants(HttpServletRequest httpServletRequest, Model model){
-
-        int applicantId = Integer.parseInt(httpServletRequest.getParameter("applicantId"));
+    @GetMapping ("viewapplicant/{applicantId}")
+    public String processApplicants(@PathVariable("applicantId") int applicantId, Model model){
 
         model.addAttribute("applicant" , applicantRepository.findById(applicantId).get());
         model.addAttribute("positionsList"
                 , positionRepository.OpenPositionsThisApplicantHasAppliedFor(applicantId));
         model.addAttribute("documentIdsAndNames"
                 , documentRepository.thisApplicantsDocumentIdsAndNames(applicantId));
-
 
         return "/hiring/viewapplicant";
     }
@@ -215,7 +204,7 @@ public class HiringController {
         positionRepository.deletePositionsThisApplicantWasHiredFor(applicantId);
 
         applicantRepository.deleteById(applicantId);
-        return "redirect:/hiring/applicants";
+        return "redirect:/availableapplicants";
     }
 
     @PostMapping("uploaddocuments")
@@ -232,14 +221,13 @@ public class HiringController {
                 return "redirect:/hiring";
             }
         }
-        return "redirect:/hiring/applicants";
+        return "redirect:/success/" + applicantId;
     }
 
     @PostMapping ("downloaddocument")
-    public ResponseEntity downloadDocument(HttpServletRequest httpServletRequest) {
+    public ResponseEntity downloadDocument(@RequestParam String documentId) {
 
-        int documentId = Integer.parseInt(httpServletRequest.getParameter("documentId"));
-        Document document = documentRepository.findById(documentId).get();
+        Document document = documentRepository.findById(Integer.parseInt(documentId)).get();
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
@@ -248,19 +236,17 @@ public class HiringController {
     }
 
     @PostMapping ("deletedocument")
-    public String deleteDocument(HttpServletRequest httpServletRequest , Model model)
+    public String deleteDocument(@RequestParam String documentId , @RequestParam String applicantId , Model model)
     {
-        int documentId = Integer.parseInt(httpServletRequest.getParameter("documentId"));
-        int applicantId = Integer.parseInt(httpServletRequest.getParameter("applicantId"));
+        documentRepository.deleteById(Integer.parseInt(documentId));
 
-        documentRepository.deleteById(documentId);
+        return "redirect:/success/" + applicantId;
+    }
 
-        model.addAttribute("applicant" , applicantRepository.findById(applicantId).get());
-        model.addAttribute("positionsList"
-                , positionRepository.OpenPositionsThisApplicantHasAppliedFor(applicantId));
-        model.addAttribute("documentIdsAndNames"
-                , documentRepository.thisApplicantsDocumentIdsAndNames(applicantId));
-
-        return "/hiring/viewapplicant";
+    @GetMapping ("success/{applicantId}")
+    public String success(@PathVariable String applicantId , Model model)
+    {
+        model.addAttribute("applicantId", applicantId);
+        return "/hiring/success";
     }
 }

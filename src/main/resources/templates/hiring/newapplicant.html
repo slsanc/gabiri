@@ -8,7 +8,7 @@
 
 <h1>Enter a New Applicant!</h1>
 
-<form th:action="@{/hiring/newapplicant}" method="post" enctype="multipart/form-data" th:object="${applicant}">
+<form th:action="@{/newapplicant}" method="post" enctype="multipart/form-data" th:object="${applicant}">
 
     <label for="firstName">First Name</label>
     <br/>
@@ -26,7 +26,7 @@
 
     <label for="email">E-mail</label>
     <br/>
-    <input id = "email" type="email" maxlength="45" name="email" required/>
+    <input id = "email" type="email" maxlength="45" name="email"/>
 
     <br/>
     <br/>

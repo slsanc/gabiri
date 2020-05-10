@@ -12,20 +12,20 @@
 
 <nav th:fragment="hiringHeader" style="background-color:black;">
     <div class="navbar">
-        <a th:href="@{/hiring}">Home</a>
+        <a th:href="@{/}">Home</a>
         <div class="subnav">
             <button class="subnavbtn"> Positions <i class="fa fa-caret-down"></i></button>
             <div class="subnav-content">
-                <a th:href="@{/hiring/positions}">See Open Positions</a>
-                <a th:href="@{/hiring/newopenposition}">Create a new Open Position</a>
-                <a th:href="@{/hiring/filledpositions}">See Recently Filled Positions</a>
+                <a th:href="@{/openpositions}">See Open Positions</a>
+                <a th:href="@{/newopenposition}">Create a new Open Position</a>
+                <a th:href="@{/filledpositions}">See Recently Filled Positions</a>
             </div>
         </div>
         <div class="subnav">
-            <button class="subnavbtn" th:href="@{/hiring/applicants}">Applicants <i class="fa fa-caret-down"></i></button>
+            <button class="subnavbtn">Applicants <i class="fa fa-caret-down"></i></button>
             <div class="subnav-content">
-                <a th:href="@{/hiring/applicants}">See Available Applicants</a>
-                <a th:href="@{/hiring/newapplicant}">Enter a New Applicant</a>
+                <a th:href="@{/availableapplicants}">See Available Applicants</a>
+                <a th:href="@{/newapplicant}">Enter a New Applicant</a>
             </div>
         </div>
     </div>

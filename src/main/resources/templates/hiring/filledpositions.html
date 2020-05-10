@@ -21,6 +21,7 @@
         <th>First Name</th>
         <th>Last Name</th>
         <th></th>
+        <th></th>
 
     </tr>
     <tr th:each="instance: ${hashMap}">
@@ -38,12 +39,8 @@
         <td th:text = "${instance.value.applicantId}"></td>
         <td th:text = "${instance.value.firstName}"></td>
         <td th:text = "${instance.value.lastName}"></td>
-        <td>
-            <form th:action="@{/hiring/applicants}" method="post"\>
-                <input type="hidden" name="applicantId" th:value="${instance.value.applicantId}">
-                <input type="submit" value="See Applicant Profile"\>
-            </form>
-        </td>
+        <td><a th:href="'/viewapplicant/' + ${instance.value.applicantId}">See Applicant Profile</a></td>
+        <td><a th:href="'/viewposition/' + ${instance.key.positionId}">See Position</a></td>
 
     </tr>
 </table>

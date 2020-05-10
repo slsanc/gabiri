@@ -4,6 +4,9 @@
 <body>
 <nav th:replace="fragments :: hiringHeader"></nav>
 
+<br/>
+<br/>
+<br/>
 
 <table>
     <tr>
@@ -31,6 +34,62 @@
 </table>
 
 <br/>
+<br/>
+
+<div th:if="${documentIdsAndNames.size()}>0">
+    <h1 th:text="|Documents associated with ${applicant.firstName} ${applicant.lastName}|"></h1>
+    <table>
+        <tr>
+            <th>Document ID</th>
+            <th>Document Filename</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr th:each="document : ${documentIdsAndNames}">
+
+            <!--documentIdsAndNames is a list of arrays. the 0th element in each is the document ID. The 1st is the filename.-->
+
+            <td th:text="${document[0]}"></td>
+            <td th:text="${document[1]}"></td>
+
+            <td>
+                <form th:action="@{/downloaddocument}" method="post">
+                    <input type="hidden" th:value="${document[0]}" name="documentId"/>
+                    <input type="submit" value="download" />
+                </form>
+            </td>
+
+            <td>
+                <form th:action="@{/deletedocument}" method="post"
+                      onsubmit="return confirm('Do you really want to delete this document? ' +
+                  'There is no way to undo this.');">
+                    <input type="hidden" th:value="${document[0]}" name="documentId"/>
+                    <input type="hidden" th:value="${applicant.applicantId}" name="applicantId"/>
+                    <input type="submit" value="delete" />
+                </form>
+            </td>
+
+        </tr>
+    </table>
+</div>
+
+<br/>
+
+
+<fieldset>
+    <legend th:text="|Upload files relating to ${applicant.firstName} ${applicant.lastName}|"></legend>
+    <form th:action="@{/uploaddocuments}" enctype="multipart/form-data" method="post">
+        <input type="hidden" name="applicantId" th:value="${applicant.applicantId}">
+        <label for="files">(max 256 KB)</label>
+        <br/>
+        <br/>
+        <input id="files" type="file" name="files" multiple>
+        <br/>
+        <br/>
+        <input type="submit">
+    </form>
+</fieldset>
+
 <br/>
 <br/>
 
@@ -67,60 +126,9 @@
 <h1 th:unless="${positionsList.size()}>0"
     th:text="|${applicant.firstName} has not applied to any positions that are currently open.|"></h1>
 
-<div th:if="${documentIdsAndNames.size()}>0">
-    <h1 th:text="|Documents associated with ${applicant.firstName} ${applicant.lastName}|"></h1>
-<table>
-    <tr>
-        <th>Document ID</th>
-        <th>Document Filename</th>
-        <th></th>
-        <th></th>
-    </tr>
-    <tr th:each="document : ${documentIdsAndNames}">
-
-<!--documentIdsAndNames is a list of arrays. the 0th element in each is the document ID. The 1st is the filename.-->
-
-        <td th:text="${document[0]}"></td>
-        <td th:text="${document[1]}"></td>
-
-        <td>
-            <form th:action="@{/hiring/downloaddocument}" method="post">
-            <input type="hidden" th:value="${document[0]}" name="documentId"/>
-            <input type="submit" value="download" />
-            </form>
-        </td>
-
-        <td>
-            <form th:action="@{/hiring/deletedocument}" method="post"
-                  onsubmit="return confirm('Do you really want to delete this document? ' +
-                  'There is no way to undo this.');">
-                <input type="hidden" th:value="${document[0]}" name="documentId"/>
-                <input type="hidden" th:value="${applicant.applicantId}" name="applicantId"/>
-                <input type="submit" value="delete" />
-            </form>
-        </td>
-
-    </tr>
-</table>
-</div>
-
-<br/>
-<br/>
 <br/>
 
-<fieldset>
-    <legend th:text="|Upload files relating to ${applicant.firstName} ${applicant.lastName}|"></legend>
-    <form th:action="@{/hiring/uploaddocuments}" enctype="multipart/form-data" method="post">
-        <input type="hidden" name="applicantId" th:value="${applicant.applicantId}">
-        <label for="files">(max 256 KB)</label>
-        <br/>
-        <br/>
-        <input id="files" type="file" name="files" multiple>
-        <br/>
-        <br/>
-        <input type="submit">
-    </form>
-</fieldset>
+
 
 <br/>
 <br/>
@@ -129,7 +137,7 @@
 <form onsubmit="return confirm('Do you really want to delete this applicant? There is no way to undo this, ' +
 'and this will delete records of any positions that this applicant has been hired for, ' +
 'as well as any documents associated with this applicant.');"
-      th:action="@{/hiring/deleteapplicant}" method="post" >
+      th:action="@{/deleteapplicant}" method="post" >
     <input type="hidden" name="applicantId" th:value="${applicant.applicantId}">
     <input type="submit" value="Delete this applicant"/>
 </form>

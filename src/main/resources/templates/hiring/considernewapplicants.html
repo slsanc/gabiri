@@ -14,7 +14,7 @@ position. It also takes the position ID (which is stored in idList.id, which is 
 same location, so it stays stored there when the form is submitted. The fact that idList contains both the position ID
 and the list of applicant IDs models the many-to-one relationship of applicants to positions. -->
 <div th:if="${applicantsNotYetConsidered.size()} > 0">
-<form th:action="@{/hiring/addapplicanttoposition}" th:object="${idList}" method="post">
+<form th:action="@{/addapplicanttoposition}" th:object="${idList}" method="post">
 
 <table>
     <tr>
@@ -22,6 +22,13 @@ and the list of applicant IDs models the many-to-one relationship of applicants 
         <th>Applicant ID</th>
         <th>First Name</th>
         <th>Last Name</th>
+        <th>Cell Phone</th>
+        <th>Work Phone</th>
+        <th>Home Phone</th>
+        <th>Address</th>
+        <th>City</th>
+        <th>State or Provence</th>
+        <th></th>
     </tr>
     <tr th:each="applicant:${applicantsNotYetConsidered}">
         <td>
@@ -30,6 +37,13 @@ and the list of applicant IDs models the many-to-one relationship of applicants 
         <td th:text="${applicant.applicantId}"></td>
         <td th:text="${applicant.firstName}"></td>
         <td th:text="${applicant.lastName}"></td>
+        <td th:text="${applicant.cellPhone}"></td>
+        <td th:text="${applicant.workPhone}"></td>
+        <td th:text="${applicant.homePhone}"></td>
+        <td th:text="${applicant.address}"></td>
+        <td th:text="${applicant.city}"></td>
+        <td th:text="${applicant.stateOrProvence}"></td>
+        <td><a th:href="@{'/viewapplicant/' + ${applicant.applicantId}}">See Applicant Profile</a></td>
     </tr>
 </table>
 
