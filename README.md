@@ -3,6 +3,17 @@
 Gabiri is a hiring management software. It is currently in pre-alpha.
 Gabiri is Sumerian for "mountain".
 
+## Features
+With this application, you can:
+* Create and delete records for positions and applicants
+* Upload files (e.g. resumes or CVs) for each applicant to be displayed on their profile page
+* Compare applicants for each open position
+* Add and remove applicants to consideration for open positions
+* Fill positions with applicants
+* Retain records of applicants for positions that have been filled
+* View currently open positions and currently filled positions
+* View each applicant's list of positions they have applied for
+
 ## Prerequisites
 
 To run this application, you will need MySQL running on your computer.
