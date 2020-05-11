@@ -14,6 +14,17 @@ With this application, you can:
 * View currently open positions and currently filled positions
 * View each applicant's list of positions they have applied for
 
+### Future Features
+Future releases will include:
+* Options to back up data
+* User registration to allow for multiple accounts
+* Integration with a calendar API
+* A search function for positions and applicants
+* A rating system for applications
+* Pagination of all tables
+* The option to choose one file for each applicant as their 'resume', which will then be displayed on the page of each position they apply to
+* The ability to add short descriptions to uploaded documents
+
 ## Prerequisites
 
 To run this application, you will need MySQL running on your computer.
