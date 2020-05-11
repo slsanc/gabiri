@@ -3,7 +3,7 @@ body {
     margin: 0;
 }
 
-body a{
+.buttonlink a{
     font-size: 16px;
     color: white;
     background-color: #036;
@@ -11,8 +11,28 @@ body a{
     text-decoration: none;
 }
 
+table a, input[type=submit], button{
+    font-size: 16px;
+    color: black;
+    background-color: gainsboro;
+    padding: 4px 4px 4px 4px;
+    border-top: 1px solid gray;
+    border-left: 1px solid gray;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    text-decoration: none;
+}
+
+
+.nolongerconsidered {
+    font-size: 16px;
+    color: gray;
+    text-decoration: line-through;
+}
+
 table, th, td {
   border: 1px solid black;
+  line-height:30px
 }
 
 .navbar {

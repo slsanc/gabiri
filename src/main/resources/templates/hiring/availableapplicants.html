@@ -9,7 +9,6 @@
 <h1>Current Applicants:</h1>
 <table>
     <tr>
-        <th></th>
         <th>Applicant ID</th>
         <th>First Name</th>
         <th>Last Name</th>
@@ -19,15 +18,9 @@
         <th>Address</th>
         <th>City</th>
         <th>State or Provence</th>
+        <th></th>
     </tr>
     <tr th:each="applicant: ${applicantsList}">
-
-        <td>
-            <form th:action="@{/hiring/applicants}" th:method="post">
-                <input type="hidden" name="applicantId" th:value="${applicant.applicantId}">
-                <input type="submit" value="see profile">
-            </form>
-        </td>
 
         <td th:text = "${applicant.applicantId}"></td>
         <td th:text = "${applicant.firstName}"></td>
@@ -38,6 +31,8 @@
         <td th:text="${applicant.address}"></td>
         <td th:text="${applicant.city}"></td>
         <td th:text="${applicant.stateOrProvence}"></td>
+        <td><a th:href="@{'/viewapplicant/' + ${applicant.applicantId}}">See Applicant Profile</a></td>
+
     </tr>
 </table>
 </div>
@@ -48,7 +43,9 @@
 <br/>
 <br/>
 
-<a href = "/hiring/newapplicant">Click Here to Enter a New Applicant!</a>
+<div class="buttonlink">
+<a href = "/newapplicant">Click Here to Enter a New Applicant!</a>
+</div>
 
 </body>
 </html>

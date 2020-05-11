@@ -7,39 +7,65 @@
 <h1 th:text="|You are viewing position ${position.positionId} - ${position.positionTitle}|"></h1>
 
 
-<div th:if="${applicantsForThisPosition.size()} > 0">
+<div th:if="${applicantsApplicationsHashMap.size()} > 0">
 
 <h1>Here are the applicants to this position:</h1>
 
 <form th:action="@{/fillposition}" th:object="${application}" method="post">
+    <input type="hidden" th:value="${position.positionId}" th:name="positionId"/>
 
     <table>
         <tr>
-            <th></th>
+            <th th:if="${position.dateFilled} == null"></th>
             <th>Applicant ID</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>Date Applied</th>
+            <th>Application Status</th>
             <th></th>
+            <th th:if="${position.dateFilled} == null"></th>
 
         </tr>
-        <tr th:each="applicant:${applicantsForThisPosition}">
-            <td><input type="radio" th:value="${applicant.applicantId}" th:name="applicantId"/></td>
-            <td th:text="${applicant.applicantId}"></td>
-            <td th:text="${applicant.firstName}"></td>
-            <td th:text="${applicant.lastName}"></td>
-            <td><a th:href="'/viewapplicant/' + ${applicant.applicantId}">See Applicant Profile</a></td>
+        <tr th:each="instance:${applicantsApplicationsHashMap}"
+            th:class=" (${instance.value.status} == 2) ? 'nolongerconsidered' : '' ">
+
+            <td th:if="${position.dateFilled} == null">
+                <input type="radio" th:value="${instance.key.applicantId}" th:name="applicantId"
+                th:disabled="(${instance.value.status} == 2)"/>
+            </td>
+            <td th:text="${instance.key.applicantId}"></td>
+            <td th:text="${instance.key.firstName}"></td>
+            <td th:text="${instance.key.lastName}"></td>
+            <td th:text="${instance.value.dateApplied}"></td>
+            <td th:text="${instance.value.statusAsString()}"></td>
+            <td>
+                <a th:href="'/viewapplicant/' + ${instance.key.applicantId}">
+                    See Applicant Profile
+                </a>
+            </td>
+
+            <td th:if="${position.dateFilled} == null">
+                <button type="submit" name="applicantIdToReconsider"
+                        th:value="${instance.key.applicantId}" th:formaction="@{/changeconsiderationstatus}">
+                    <div th:text="(${instance.value.status}==2) ? 'Reconsider Applicant' : 'Remove from Consideration'">
+                    </div>
+                </button>
+            </td>
 
 
         </tr>
     </table>
 
-    <input type="hidden" th:value="${position.positionId}" th:name="positionId"/>
-    <input type="submit" value="Fill this position with the selected applicant"/>
+    <br/>
+
+    <input type="submit" value="Fill this position with the selected applicant" th:if="${position.dateFilled} == null"/>
+
 </form>
 </div>
 
-<h1 th:unless="${applicantsForThisPosition.size()} > 0">No applicants to this position yet!</h1>
+<h1 th:unless="${applicantsApplicationsHashMap.size()} > 0">No applicants to this position yet!</h1>
 
+<br/>
 <br/>
 
 <div class="buttonlink">

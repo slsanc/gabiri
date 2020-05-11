@@ -93,12 +93,11 @@
 <br/>
 <br/>
 
-<div th:if="${positionsList.size()}>0">
+<div th:if="${positionApplicationHashMap.size()}>0">
     <h1 th:text="|${applicant.firstName} has applied to the following open positions:|"></h1>
 
     <table>
         <tr>
-            <th></th>
             <th>Position ID</th>
             <th>Position Title</th>
             <th>Max Salary</th>
@@ -107,23 +106,29 @@
             <th>State or Provence</th>
             <th>Employment Type</th>
             <th>Start Date</th>
+            <th>Date Applied</th>
+            <th>Application Status</th>
+            <th></th>
         </tr>
-        <tr th:each="position: ${positionsList}">
+        <tr th:each="instance: ${positionApplicationHashMap}">
 
-            <td></td>
-            <td th:text = "${position.positionId}"></td>
-            <td th:text = "${position.positionTitle}"></td>
-            <td th:text = "${position.maxSalary}"></td>
-            <td th:text = "${position.maxWage}"></td>
-            <td th:text = "${position.city}"></td>
-            <td th:text = "${position.stateOrProvence}"></td>
-            <td th:text = "${position.employmentTypeAsString()}"></td>
-            <td th:text = "${position.startDate}"></td>
+
+            <td th:text = "${instance.key.positionId}"></td>
+            <td th:text = "${instance.key.positionTitle}"></td>
+            <td th:text = "${instance.key.maxSalary}"></td>
+            <td th:text = "${instance.key.maxWage}"></td>
+            <td th:text = "${instance.key.city}"></td>
+            <td th:text = "${instance.key.stateOrProvence}"></td>
+            <td th:text = "${instance.key.employmentTypeAsString()}"></td>
+            <td th:text = "${instance.key.startDate}"></td>
+            <td th:text = "${instance.value.dateApplied}"></td>
+            <td th:text = "${instance.value.statusAsString()}"></td>
+            <td><a th:href="@{'/viewposition/' + ${instance.key.positionId}}">Other Applicants</a></td>
         </tr>
     </table>
 </div>
 
-<h1 th:unless="${positionsList.size()}>0"
+<h1 th:unless="${positionApplicationHashMap.size()}>0"
     th:text="|${applicant.firstName} has not applied to any positions that are currently open.|"></h1>
 
 <br/>

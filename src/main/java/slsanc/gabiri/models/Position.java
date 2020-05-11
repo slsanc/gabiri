@@ -100,9 +100,18 @@ public class Position {
         this.dateFilled = dateFilled;
     }
 
+    public boolean isStillOpen(){
+        if(dateFilled==null){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     public String employmentTypeAsString(){
-        String[] employmentTypes={"Full Time Salaried", "Full Time Wage-Based", "Part Time Wage-Based", "Independent Contractor",
-                "Freelance", "Other"};
+        String[] employmentTypes={"Full Time Salaried", "Full Time Wage-Based", "Part Time Wage-Based"
+                , "Independent Contractor", "Freelance", "Other"};
         return employmentTypes[(employmentType-1)];
     }
 

@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
 import slsanc.gabiri.models.Position;
 
 import java.sql.Date;
@@ -19,9 +18,11 @@ public interface PositionRepository extends JpaRepository<Position,Integer> {
     @Query(value = "SELECT * FROM Positions WHERE date_filled IS NULL ORDER BY date_created DESC" , nativeQuery = true)
     List<Position> openPositions();
 
+
     @Query(value = "SELECT * FROM Positions WHERE date_filled IS NOT NULL ORDER BY date_filled DESC"
             , nativeQuery = true)
     List<Position> filledPositions();
+
 
     @Transactional @Modifying @Query(value="UPDATE Positions SET date_filled = :now WHERE position_id = :positionId"
              , nativeQuery = true)
@@ -29,9 +30,9 @@ public interface PositionRepository extends JpaRepository<Position,Integer> {
 
 
     @Query(value = "SELECT * FROM POSITIONS WHERE position_id IN " +
-            "(SELECT position_id FROM APPLICATIONS WHERE applicant_id = :applicantId) " +
-            "AND date_filled IS NULL" , nativeQuery = true)
-    List<Position> OpenPositionsThisApplicantHasAppliedFor(@Param("applicantId") int applicantId);
+            "(SELECT position_id FROM APPLICATIONS WHERE applicant_id = :applicantId)" , nativeQuery = true)
+    List<Position> positionsThisApplicantHasAppliedFor(@Param("applicantId") int applicantId);
+
 
     @Transactional @Modifying @Query(value="DELETE FROM POSITIONS WHERE position_id IN " +
             "(SELECT position_id FROM APPLICATIONS WHERE applicant_id = :applicantId AND status BETWEEN 3 AND 4)"

@@ -55,6 +55,12 @@ public class Application {
         this.rating = rating;
     }
 
+    public String statusAsString(){
+        String[] statusTypes = {"Under Consideration", "No Longer Under Consideration"
+                , "Hired", "Hired, Position Completed or Terminated"};
+        return statusTypes[status-1];
+    }
+
     public Application() {}
 
 }

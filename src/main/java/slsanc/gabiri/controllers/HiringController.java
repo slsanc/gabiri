@@ -72,10 +72,17 @@ public class HiringController {
 
     @GetMapping ("/viewposition/{positionId}")
     public String processPositions(@PathVariable("positionId") int positionId, Model model) {
+        Position position = positionRepository.findById(positionId).get();
+        HashMap<Applicant , Application> applicantsApplicationsHashMap = new HashMap<>();
 
-        model.addAttribute("applicantsForThisPosition",
-                applicantRepository.findApplicantsByPositionAppliedfor(positionId));
-        model.addAttribute("position",positionRepository.findById(positionId).get());
+        /*The following loop goes through a list of applications to this position and finds the associated applicant.
+        * It returns the two, linked in a hashmap.*/
+        for(Application a : applicationRepository.findApplicationsByPosition(positionId , position.isStillOpen())){
+            applicantsApplicationsHashMap.put(applicantRepository.findById(a.getApplicantId()).get() , a);
+        }
+
+        model.addAttribute("applicantsApplicationsHashMap", applicantsApplicationsHashMap);
+        model.addAttribute("position",position);
         model.addAttribute("application",new Application());
 
         return "hiring/viewposition";
@@ -120,11 +127,31 @@ public class HiringController {
         return "redirect:/viewposition/" + application.getPositionId();
     }
 
+    @PostMapping ("changeconsiderationstatus")
+    public String changeConsiderationStatus(@RequestParam int applicantIdToReconsider
+            , @RequestParam int positionId){
+
+        Application application = applicationRepository.findApplicationByPositionAndApplicant(
+                positionId, applicantIdToReconsider);
+
+        if (application.getStatus() == 1){
+            application.setStatus(2);
+        }
+        else if (application.getStatus() == 2){
+            application.setStatus(1);
+        }
+
+        applicationRepository.changeStatus(application.getPositionId() , application.getApplicantId()
+                , application.getStatus());
+
+        return "redirect:/success/position/" + positionId;
+    }
+
     @PostMapping ("fillposition")
-    public String fillposition(@ModelAttribute Application application){
+    public String fillPosition(@ModelAttribute Application application){
 
         positionRepository.setDateFilled(application.getPositionId() , Date.valueOf(LocalDate.now()));
-        applicationRepository.changeStatus(application.getApplicantId() , application.getPositionId() , 3);
+        applicationRepository.changeStatus(application.getPositionId() , application.getApplicantId() , 3);
         applicationRepository.rejectRunnersUp(application.getPositionId() , application.getApplicantId());
 
         return "redirect:/openpositions";
@@ -134,17 +161,16 @@ public class HiringController {
     @GetMapping ("filledpositions")
     public String displayFilledPositions(Model model){
 
-        HashMap<Position , Applicant> hashMap = new HashMap<>();
+        HashMap<Position , Applicant> positionApplicantHashMap = new HashMap<>();
         Applicant applicant;
 
         for (Position position : positionRepository.filledPositions())
         {
-            System.out.println(position.getPositionId());
             applicant = applicantRepository.applicantHiredFor(position.getPositionId());
-            hashMap.put(position,applicant);
+            positionApplicantHashMap.put(position,applicant);
         }
 
-        model.addAttribute("hashMap",hashMap);
+        model.addAttribute("positionApplicantHashMap",positionApplicantHashMap);
 
         return "hiring/filledpositions";
     }
@@ -189,9 +215,16 @@ public class HiringController {
     @GetMapping ("viewapplicant/{applicantId}")
     public String processApplicants(@PathVariable("applicantId") int applicantId, Model model){
 
+        HashMap<Position,Application>positionApplicationHashMap = new HashMap<>();
+
+        for(Position position: positionRepository.positionsThisApplicantHasAppliedFor(applicantId)){
+            positionApplicationHashMap.put(position, applicationRepository.findApplicationByPositionAndApplicant
+                    (position.getPositionId() , applicantId));
+        }
+
+
         model.addAttribute("applicant" , applicantRepository.findById(applicantId).get());
-        model.addAttribute("positionsList"
-                , positionRepository.OpenPositionsThisApplicantHasAppliedFor(applicantId));
+        model.addAttribute("positionApplicationHashMap", positionApplicationHashMap);
         model.addAttribute("documentIdsAndNames"
                 , documentRepository.thisApplicantsDocumentIdsAndNames(applicantId));
 
@@ -218,10 +251,10 @@ public class HiringController {
                     documentRepository.save(document);
                 }
             } catch (IOException e) {
-                return "redirect:/hiring";
+                return "redirect:/";
             }
         }
-        return "redirect:/success/" + applicantId;
+        return "redirect:/success/applicant/" + applicantId;
     }
 
     @PostMapping ("downloaddocument")
@@ -239,14 +272,19 @@ public class HiringController {
     public String deleteDocument(@RequestParam String documentId , @RequestParam String applicantId , Model model)
     {
         documentRepository.deleteById(Integer.parseInt(documentId));
-
-        return "redirect:/success/" + applicantId;
+        return "redirect:/success/applicant/" + applicantId;
     }
 
-    @GetMapping ("success/{applicantId}")
-    public String success(@PathVariable String applicantId , Model model)
+    @GetMapping ("success/{positionOrApplicant}/{id}")
+    public String success(@PathVariable String positionOrApplicant , @PathVariable String id, Model model)
     {
-        model.addAttribute("applicantId", applicantId);
+        model.addAttribute("positionOrApplicant", positionOrApplicant);
+        model.addAttribute("id", id);
         return "/hiring/success";
+    }
+
+    @GetMapping ("errorpage")
+    public String errorpage(){
+        return "/hiring/errorpage";
     }
 }

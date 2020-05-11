@@ -3,10 +3,8 @@
 <head th:replace="fragments :: head"></head>
 <body>
 
-<h1>Success!</h1>
-<a th:href="@{'/view' + ${positionOrApplicant} + '/' + ${id}}">
-    Click here to return to the previous page.
-</a>
+<h1>There was an error in handling your request.</h1>
+<a th:href="@{/}">Click here to return to the homepage.</a>
 
 </body>
 </html>

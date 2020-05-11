@@ -4,7 +4,7 @@
 <body>
 <nav th:replace="fragments :: hiringHeader"></nav>
 
-<div th:if="${hashMap.size()} > 0">
+<div th:if="${positionApplicantHashMap.size()} > 0">
 <h1>Recently Filled Positions:</h1>
 <table>
     <tr>
@@ -24,7 +24,7 @@
         <th></th>
 
     </tr>
-    <tr th:each="instance: ${hashMap}">
+    <tr th:each="instance: ${positionApplicantHashMap}">
 
 
         <td th:text = "${instance.key.positionId}"></td>
@@ -39,14 +39,14 @@
         <td th:text = "${instance.value.applicantId}"></td>
         <td th:text = "${instance.value.firstName}"></td>
         <td th:text = "${instance.value.lastName}"></td>
-        <td><a th:href="'/viewapplicant/' + ${instance.value.applicantId}">See Applicant Profile</a></td>
-        <td><a th:href="'/viewposition/' + ${instance.key.positionId}">See Position</a></td>
+        <td><a th:href="'/viewapplicant/' + ${instance.value.applicantId}">Applicant Profile</a></td>
+        <td><a th:href="'/viewposition/' + ${instance.key.positionId}">Other Applicants</a></td>
 
     </tr>
 </table>
 </div>
 
-<h1 th:unless="${hashMap.size()} > 0">No Filled Positions Yet</h1>
+<h1 th:unless="${positionApplicantHashMap.size()} > 0">No Filled Positions Yet</h1>
 
 </body>
 </html>
