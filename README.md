@@ -1,7 +1,7 @@
 # Gabiri
 
 Gabiri is a hiring management software. It is currently in pre-alpha.
-Gabiri is ancient Sumerian for "mountain".
+Gabiri is Sumerian for "mountain".
 
 ## Prerequisites
 
@@ -20,6 +20,27 @@ Once you connect to Gabiri through your browser, you will be prompted to give a 
 * [MySQL](https://www.mysql.com/) - The database system used
 * [ThymeLeaf](https://www.thymeleaf.org/) - a template engine for the view layer.
 
+## Screenshots
+
+![](screenshots/login.png)
+
+![](screenshots/openPositions.png)
+
+![](screenshots/viewPosition.png)
+
+![](screenshots/viewApplicant.png)
+
+![](screenshots/considerNewApplicants.png)
+
+![](screenshots/availableApplicants.png)
+
+![](screenshots/newOpenPosition.png)
+
+![](screenshots/newApplicant.png)
+
+![](screenshots/filledpositions.png)
+
 ## Acknowledgments
 
 * I'd like to thank my wonderful family, who helped me test this program, and who made this project possible at all by loving me into existence.
+* Special Acknowledgments to https://www.fakenamegenerator.com/ which helped me create dummy data I used to test this project (including the data displayed in the screenshots!)
