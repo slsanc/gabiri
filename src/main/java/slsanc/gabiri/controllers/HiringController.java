@@ -217,7 +217,7 @@ public class HiringController {
 
         HashMap<Position,Application>positionApplicationHashMap = new HashMap<>();
 
-        for(Position position: positionRepository.positionsThisApplicantHasAppliedFor(applicantId)){
+        for(Position position: positionRepository.positionsAppliedTo(applicantId)){
             positionApplicationHashMap.put(position, applicationRepository.findApplicationByPositionAndApplicant
                     (position.getPositionId() , applicantId));
         }
@@ -230,6 +230,32 @@ public class HiringController {
 
         return "/hiring/viewapplicant";
     }
+
+    @GetMapping ("considernewpositions/{applicantId}")
+    public String considerNewPositions(@PathVariable int applicantId , Model model){
+        IdList idList = new IdList(applicantId);
+        model.addAttribute("idList" , idList);
+        model.addAttribute("positionsNotYetAppliedTo" , positionRepository.positionsNotYetAppliedTo(applicantId));
+        return "/hiring/considernewpositions";
+    }
+
+    @PostMapping ("addpositiontoapplicant")
+    public String addPositionToApplicant(@ModelAttribute IdList idList){
+
+        Application application = new Application();
+        application.setApplicantId(idList.getId());
+
+        for (Integer i : idList.getIdList())
+        {
+            application.setPositionId(i);
+            application.setDateApplied(Date.valueOf(LocalDate.now()));
+            application.setStatus(1);
+            applicationRepository.save(application);
+        }
+
+        return "redirect:/viewapplicant/" + application.getApplicantId();
+    }
+
 
     @PostMapping ("deleteapplicant")
     public String deleteApplicant(@RequestParam int applicantId){

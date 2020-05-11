@@ -132,7 +132,8 @@
     th:text="|${applicant.firstName} has not applied to any positions that are currently open.|"></h1>
 
 <br/>
-
+<br/>
+<a th:href="@{'/considernewpositions/' + ${applicant.applicantId}}">Consider this person for an open position!</a>
 
 
 <br/>

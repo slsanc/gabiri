@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+</head>
+<body>
+<nav th:replace="fragments :: hiringHeader"></nav>
+
+
+
+<div th:if="${positionsNotYetAppliedTo.size()} > 0">
+    <h1>Select one or more positions, then click 'O.K.' to add the candidate to consideration for these Positions</h1>
+    <form th:action="@{/addpositiontoapplicant}" th:object="${idList}" method="post">
+
+        <table>
+            <tr>
+                <th></th>
+                <th>Position ID</th>
+                <th>Position Title</th>
+                <th>Max Salary</th>
+                <th>Max Wage</th>
+                <th>City</th>
+                <th>State or Provence</th>
+                <th>Employment Type</th>
+                <th>Start Date</th>
+            </tr>
+            <tr th:each="position:${positionsNotYetAppliedTo}">
+                <td>
+                    <input type="checkbox" th:value="${position.positionId}" th:field="${idList.idList}"/>
+                </td>
+                <td th:text = "${position.positionId}"></td>
+                <td th:text = "${position.positionTitle}"></td>
+                <td th:text = "${position.maxSalary}"></td>
+                <td th:text = "${position.maxWage}"></td>
+                <td th:text = "${position.city}"></td>
+                <td th:text = "${position.stateOrProvence}"></td>
+                <td th:text = "${position.employmentTypeAsString()}"></td>
+                <td th:text = "${position.startDate}"></td>
+            </tr>
+        </table>
+
+        <input type="hidden" th:value="${idList.id}" th:field="${idList.id}"/>
+        <input type="submit" value="O.K."/>
+
+    </form>
+</div>
+
+<h1 th:unless="${positionsNotYetAppliedTo.size()} > 0">No Available Positions!</h1>
+
+</body>
+</html>

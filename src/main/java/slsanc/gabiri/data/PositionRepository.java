@@ -31,12 +31,16 @@ public interface PositionRepository extends JpaRepository<Position,Integer> {
 
     @Query(value = "SELECT * FROM POSITIONS WHERE position_id IN " +
             "(SELECT position_id FROM APPLICATIONS WHERE applicant_id = :applicantId)" , nativeQuery = true)
-    List<Position> positionsThisApplicantHasAppliedFor(@Param("applicantId") int applicantId);
+    List<Position> positionsAppliedTo(@Param("applicantId") int applicantId);
 
 
     @Transactional @Modifying @Query(value="DELETE FROM POSITIONS WHERE position_id IN " +
             "(SELECT position_id FROM APPLICATIONS WHERE applicant_id = :applicantId AND status BETWEEN 3 AND 4)"
             , nativeQuery = true)
     void deletePositionsThisApplicantWasHiredFor(@Param("applicantId") int applicantId);
+
+    @Query(value="SELECT * FROM POSITIONS WHERE position_id NOT IN " +
+            "(SELECT position_id FROM APPLICATIONS WHERE applicant_id = :applicantId)" , nativeQuery = true)
+    List<Position> positionsNotYetAppliedTo(@Param("applicantId") int applicantId);
 
 }
