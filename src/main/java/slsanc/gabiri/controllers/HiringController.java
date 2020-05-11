@@ -108,18 +108,27 @@ public class HiringController {
 
     @PostMapping ("addapplicanttoposition")
     /* This bit handles when the user clicks "add selected applicants to position" */
-    public String processAddApplicantToPosition(@ModelAttribute IdList idList){
+    public String AddApplicantToPosition(@ModelAttribute IdList idList, @RequestParam Date dateApplied){
 
-        /* The following code takes a list of users selected by the user, as well as a positionID the user has
-        selected, and records in the "Applications" table that each applicant has now applied for the given position.*/
+
 
         Application application = new Application();
         application.setPositionId(idList.getId());
 
+        if(dateApplied == null)
+        {
+            application.setDateApplied(Date.valueOf(LocalDate.now()));
+        }
+        else
+        {
+            application.setDateApplied(dateApplied);
+        }
+
+        /* The following code takes a list of users selected by the user, as well as a positionID the user has
+        selected, and records in the "Applications" table that each applicant has now applied for the given position.*/
         for (Integer i : idList.getIdList())
         {
             application.setApplicantId(i);
-            application.setDateApplied(Date.valueOf(LocalDate.now()));
             application.setStatus(1);
             applicationRepository.save(application);
         }
@@ -240,15 +249,23 @@ public class HiringController {
     }
 
     @PostMapping ("addpositiontoapplicant")
-    public String addPositionToApplicant(@ModelAttribute IdList idList){
+    public String addPositionToApplicant(@ModelAttribute IdList idList , @RequestParam Date dateApplied){
 
         Application application = new Application();
         application.setApplicantId(idList.getId());
 
+        if(dateApplied == null)
+        {
+            application.setDateApplied(Date.valueOf(LocalDate.now()));
+        }
+        else
+        {
+            application.setDateApplied(dateApplied);
+        }
+
         for (Integer i : idList.getIdList())
         {
             application.setPositionId(i);
-            application.setDateApplied(Date.valueOf(LocalDate.now()));
             application.setStatus(1);
             applicationRepository.save(application);
         }

@@ -46,13 +46,25 @@ and the list of applicant IDs models the many-to-one relationship of applicants 
         <td><a th:href="@{'/viewapplicant/' + ${applicant.applicantId}}">See Applicant Profile</a></td>
     </tr>
 </table>
+    <br/>
+    <br/>
+
+    <label for="dateApplied">
+        Date these applicants first applied to / were considered for this position (if not today):
+    </label>
+
+    <br/>
+
+    <input type="date" id="dateApplied" name="dateApplied"/>
+
+    <br/>
+    <br/>
 
     <input type="hidden" th:value="${idList.id}" th:field="${idList.id}"/>
     <input type="submit" value="O.K."/>
 
 </form>
 </div>
-
 <h1 th:unless="${applicantsNotYetConsidered.size()} > 0">No Available Applicants!</h1>
 
 </body>

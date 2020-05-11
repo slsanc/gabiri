@@ -37,6 +37,19 @@
                 <td th:text = "${position.startDate}"></td>
             </tr>
         </table>
+        <br/>
+        <br/>
+
+        <label for="dateApplied">
+            Date this applicant first applied to / was considered for this position (if not today):
+        </label>
+
+        <br/>
+
+        <input type="date" id="dateApplied" name="dateApplied"/>
+
+        <br/>
+        <br/>
 
         <input type="hidden" th:value="${idList.id}" th:field="${idList.id}"/>
         <input type="submit" value="O.K."/>
