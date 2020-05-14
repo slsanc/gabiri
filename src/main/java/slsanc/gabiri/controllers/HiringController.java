@@ -1,7 +1,5 @@
 package slsanc.gabiri.controllers;
 
-import org.apache.tomcat.jni.Local;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -9,26 +7,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import slsanc.gabiri.data.ApplicantRepository;
-import slsanc.gabiri.data.ApplicationRepository;
-import slsanc.gabiri.data.DocumentRepository;
-import slsanc.gabiri.data.PositionRepository;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
+import slsanc.gabiri.data.*;
 import slsanc.gabiri.models.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
-import java.sql.Blob;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class HiringController {
 
+    //<editor-fold desc="Creation of repository objects">
     @Autowired
     private PositionRepository positionRepository;
 
@@ -41,13 +36,30 @@ public class HiringController {
     @Autowired
     private DocumentRepository documentRepository;
 
+    //</editor-fold>
 
-    @GetMapping ("")
+    //<editor-fold desc="Success, Errors and home">
+    @GetMapping ("home")
     public String displayIndex(Model model) {
         return "hiring/index";
     }
 
+    @GetMapping ("success/{positionOrApplicant}/{id}")
+    public String success(@PathVariable String positionOrApplicant , @PathVariable String id, Model model) {
+        model.addAttribute("positionOrApplicant", positionOrApplicant);
+        model.addAttribute("id", id);
+        return "/hiring/success";
+    }
 
+    @GetMapping ("errorpage")
+    public String errorpage(){
+        return "/hiring/errorpage";
+    }
+
+
+    //</editor-fold>
+
+    //<editor-fold desc="Methods to do with handling positions">
     @GetMapping("newopenposition")
     public String displayNewPositionForm(Model model) {
         model.addAttribute("position", new Position());
@@ -115,14 +127,16 @@ public class HiringController {
         Application application = new Application();
         application.setPositionId(idList.getId());
 
-        if(dateApplied == null)
-        {
-            application.setDateApplied(Date.valueOf(LocalDate.now()));
-        }
-        else
-        {
-            application.setDateApplied(dateApplied);
-        }
+        application.setDateApplied(Objects.requireNonNullElseGet(dateApplied, () -> Date.valueOf(LocalDate.now())));
+
+//        if(dateApplied == null)
+//        {
+//            application.setDateApplied(Date.valueOf(LocalDate.now()));
+//        }
+//        else
+//        {
+//            application.setDateApplied(dateApplied);
+//        }
 
         /* The following code takes a list of users selected by the user, as well as a positionID the user has
         selected, and records in the "Applications" table that each applicant has now applied for the given position.*/
@@ -183,10 +197,9 @@ public class HiringController {
 
         return "hiring/filledpositions";
     }
+    //</editor-fold>
 
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-
+    //<editor-fold desc="Methods to do with handling applicants">
     @GetMapping("newapplicant")
     public String displayNewApplicantForm(Model model) {
         model.addAttribute("applicant", new Applicant());
@@ -207,7 +220,7 @@ public class HiringController {
                     documentRepository.save(document);
                 }
             } catch (IOException e) {
-                return "redirect:/";
+                return "redirect:/home";
             }
         }
         return "redirect:/availableapplicants";
@@ -254,14 +267,7 @@ public class HiringController {
         Application application = new Application();
         application.setApplicantId(idList.getId());
 
-        if(dateApplied == null)
-        {
-            application.setDateApplied(Date.valueOf(LocalDate.now()));
-        }
-        else
-        {
-            application.setDateApplied(dateApplied);
-        }
+        application.setDateApplied(Objects.requireNonNullElseGet(dateApplied, () -> Date.valueOf(LocalDate.now())));
 
         for (Integer i : idList.getIdList())
         {
@@ -294,7 +300,7 @@ public class HiringController {
                     documentRepository.save(document);
                 }
             } catch (IOException e) {
-                return "redirect:/";
+                return "redirect:/home";
             }
         }
         return "redirect:/success/applicant/" + applicantId;
@@ -317,17 +323,8 @@ public class HiringController {
         documentRepository.deleteById(Integer.parseInt(documentId));
         return "redirect:/success/applicant/" + applicantId;
     }
+    //</editor-fold>
 
-    @GetMapping ("success/{positionOrApplicant}/{id}")
-    public String success(@PathVariable String positionOrApplicant , @PathVariable String id, Model model)
-    {
-        model.addAttribute("positionOrApplicant", positionOrApplicant);
-        model.addAttribute("id", id);
-        return "/hiring/success";
-    }
 
-    @GetMapping ("errorpage")
-    public String errorpage(){
-        return "/hiring/errorpage";
-    }
+
 }

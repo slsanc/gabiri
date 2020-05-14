@@ -9,5 +9,4 @@ public class GabiriApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GabiriApplication.class, args);
 	}
-
 }

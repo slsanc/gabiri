@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
-</head>
 <body>
 <nav th:replace="fragments :: hiringHeader"></nav>
 
@@ -61,7 +60,7 @@
 
     <br/>
     <label>Max Wage</label>
-    <input id="maxWage" type = "number" min="0"  max="999.99", step = ".01" pattern="[^e]+"
+    <input id="maxWage" type = "number" min="0"  max="999.99" step = ".01" pattern="[^e]+"
            th:field="${position.maxWage}" disabled/>
 
     <br/>

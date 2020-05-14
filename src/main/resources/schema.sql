@@ -49,7 +49,6 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Positions` (
   `start_date` DATE NULL,
   `date_created` DATE NULL,
   `date_filled` DATE NULL,
-  `date_ended` DATE NULL,
   PRIMARY KEY (`position_id`),
   UNIQUE INDEX `position_id_UNIQUE` (`position_id` ASC) VISIBLE,
   INDEX `FK_positions_departments_idx` (`department_id` ASC) VISIBLE,
@@ -142,6 +141,55 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Documents` (
   CONSTRAINT `FK_documents_applicants`
     FOREIGN KEY (`applicant_id`)
     REFERENCES `gabiri`.`Applicants` (`applicant_id`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `gabiri`.`Users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `gabiri`.`Users` (
+  `user_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `first_name` VARCHAR(20) NOT NULL,
+  `last_name` VARCHAR(30) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `username` VARCHAR(15) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `gabiri`.`User_Role_Types`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `gabiri`.`User_Role_Types` (
+  `role_id` INT UNSIGNED NOT NULL,
+  `role_name` VARCHAR(45) NOT NULL,
+  `description` VARCHAR(255) NULL,
+  PRIMARY KEY (`role_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `gabiri`.`User_Roles`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `gabiri`.`User_Roles` (
+  `user_id` INT UNSIGNED NOT NULL,
+  `role_id` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`user_id`, `role_id`),
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) INVISIBLE,
+  INDEX `FK_roles_role_types_idx` (`role_id` ASC) INVISIBLE,
+  CONSTRAINT `FK_roles_users`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `gabiri`.`Users` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT,
+  CONSTRAINT `FK_roles_role_types`
+    FOREIGN KEY (`role_id`)
+    REFERENCES `gabiri`.`User_Role_Types` (`role_id`)
     ON DELETE CASCADE
     ON UPDATE RESTRICT)
 ENGINE = InnoDB;

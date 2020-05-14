@@ -25,3 +25,14 @@ INSERT IGNORE INTO `gabiri`.`Application_Status_Types` (`status_id`, `status_des
 
 COMMIT;
 
+
+-- -----------------------------------------------------
+-- Data for table `gabiri`.`User_Role_Types`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `gabiri`;
+INSERT IGNORE INTO `gabiri`.`User_Role_Types` (`role_id`, `role_name`, `description`) VALUES (1, 'SUPER_USER', '');
+INSERT IGNORE INTO `gabiri`.`User_Role_Types` (`role_id`, `role_name`, `description`) VALUES (2, 'ADMIN', '');
+INSERT IGNORE INTO `gabiri`.`User_Role_Types` (`role_id`, `role_name`, `description`) VALUES (3, 'USER', '');
+
+COMMIT;

@@ -101,12 +101,7 @@ public class Position {
     }
 
     public boolean isStillOpen(){
-        if(dateFilled==null){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return(dateFilled == null);
     }
 
     public String employmentTypeAsString(){

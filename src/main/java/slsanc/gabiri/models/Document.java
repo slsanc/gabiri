@@ -1,10 +1,6 @@
 package slsanc.gabiri.models;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.persistence.*;
-import java.io.File;
-import java.sql.Blob;
 
 @Entity
 @Table(name="Documents")

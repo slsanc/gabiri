@@ -1,7 +1,6 @@
 package slsanc.gabiri.models;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Date;
 
 @Entity
