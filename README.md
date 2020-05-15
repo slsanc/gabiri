@@ -17,7 +17,6 @@ With this application, you can:
 ### Future Features
 Future releases will include:
 * Options to back up data
-* User registration to allow for multiple accounts
 * Integration with a calendar API
 * A search function for positions and applicants
 * A rating system for applications
@@ -27,13 +26,11 @@ Future releases will include:
 
 ## Prerequisites
 
-To run this application, you will need MySQL running on your computer.
+To run this application, you will need MySQL running.
 
 ### Getting Started
 
- Simply change the spring.datasource.username and spring.datasource.password settings in the application.properties file to the username and password of a MySQL user with schema-creation privileges on your server. If a schema does not already exist for this application, it will create one automatically.
-
-Once you connect to Gabiri through your browser, you will be prompted to give a username and password. The defaults are “user” and “pass”, though you can change this in the application.properties file as well. Creation of new user accounts is a planned feature but has not yet been implemented yet.
+ Simply change the spring.datasource.username and spring.datasource.password settings in the application.properties file to the username and password of a MySQL user with schema-creation privileges on your server. If a schema does not already exist for this application, one will be created automatically when you run it.
 
 ## Built With
 
