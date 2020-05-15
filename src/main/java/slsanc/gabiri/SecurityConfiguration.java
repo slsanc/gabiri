@@ -39,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
 
-                .antMatchers("/registration/**").permitAll()
+                .antMatchers("/registration/**" , "/styles.css").permitAll()
                 .antMatchers("/**").hasAnyAuthority("SUPER_USER", "ADMIN", "USER")
                 .anyRequest().authenticated()
                 .and()
@@ -60,11 +60,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .accessDeniedPage("/access-denied");
     }
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/static/**" );
-    }
+//
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {
+//        web.ignoring().antMatchers("/static/**" );
+//    }
 
 
 

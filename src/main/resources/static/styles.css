@@ -3,7 +3,11 @@ body {
     margin: 0;
 }
 
-.buttonlink a{
+body a{
+color: dodgerblue;
+}
+
+.paddedlink a{
     font-size: 16px;
     color: white;
     background-color: #036;
