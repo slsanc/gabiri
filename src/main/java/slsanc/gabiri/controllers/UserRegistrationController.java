@@ -43,9 +43,6 @@ public class UserRegistrationController {
         String viewName = "/registration/success";
         String message = new String();
 
-        System.out.println(newUser.getPassword());
-        System.out.println(confirmPassword);
-
         if (userRepository.findUserByEmail(newUser.getEmail()) != null) {
             message = "A user with this email already exists!";
             viewName = "/registration/error";
