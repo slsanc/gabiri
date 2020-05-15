@@ -17,6 +17,7 @@ import javax.sql.DataSource;
 
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+
     @Autowired
     private DataSource dataSource;
 
@@ -38,7 +39,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
 
-                .antMatchers("/styles").permitAll()
                 .antMatchers("/registration/**").permitAll()
                 .antMatchers("/**").hasAnyAuthority("SUPER_USER", "ADMIN", "USER")
                 .anyRequest().authenticated()
@@ -48,23 +48,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .loginPage("/registration/login")
                 .loginProcessingUrl("/registration/login")
                 .failureUrl("/registration/login?error=true")
-                .defaultSuccessUrl("/home")
+                .defaultSuccessUrl("/")
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .and()
 
 
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/home").and()
+                .logoutUrl("/registration/logout")
+                .logoutSuccessUrl("/").and()
                 .exceptionHandling()
                 .accessDeniedPage("/access-denied");
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+        web.ignoring().antMatchers("/static/**" );
     }
+
+
 
 
 }

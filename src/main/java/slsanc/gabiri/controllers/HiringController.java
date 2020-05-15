@@ -39,7 +39,7 @@ public class HiringController {
     //</editor-fold>
 
     //<editor-fold desc="Success, Errors and home">
-    @GetMapping ("home")
+    @GetMapping ("")
     public String displayIndex(Model model) {
         return "hiring/index";
     }
@@ -220,7 +220,7 @@ public class HiringController {
                     documentRepository.save(document);
                 }
             } catch (IOException e) {
-                return "redirect:/home";
+                return "redirect:/";
             }
         }
         return "redirect:/availableapplicants";
@@ -300,7 +300,7 @@ public class HiringController {
                     documentRepository.save(document);
                 }
             } catch (IOException e) {
-                return "redirect:/home";
+                return "redirect:/";
             }
         }
         return "redirect:/success/applicant/" + applicantId;

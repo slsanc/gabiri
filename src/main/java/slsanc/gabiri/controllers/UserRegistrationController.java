@@ -1,17 +1,17 @@
 package slsanc.gabiri.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import slsanc.gabiri.data.UserRepository;
 import slsanc.gabiri.models.User;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/registration")
@@ -19,6 +19,9 @@ public class UserRegistrationController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/login")
     public String login(){
@@ -32,8 +35,10 @@ public class UserRegistrationController {
     }
 
     @PostMapping("")
-    public RedirectView processResgistrationForm(@ModelAttribute("newUser") @Valid User newUser
-            , @RequestParam String confirmPassword, RedirectAttributes redirectAttributes) {
+    public RedirectView processResgistrationForm(@Valid User newUser
+            , @RequestParam String confirmPassword
+            , BindingResult bindingResult
+            , RedirectAttributes redirectAttributes) {
 
         String viewName = "/registration/success";
         String message = new String();
@@ -54,6 +59,7 @@ public class UserRegistrationController {
             viewName = "/registration/error";
         }
         else {
+            newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
             userRepository.save(newUser);
             userRepository.createPermissions(newUser.getUserId() , 3);
             viewName = "/registration/success";

@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
-<body>
+<body style="background-color: gainsboro; text-align: center;">
 
-<form th:action="@{/registration/login}" method="POST" class="form-signin">
-    <label for="username">username</label>
-    <input type="text" id="username" name="username">
+    <form th:action="@{/registration/login}" method="POST" class="form-signin" style="float: center;">
+        <h1>Please sign in</h1>
+        <input type="text" id="username" name="username" placeholder="Username">
+        <br/>
+        <br/>
+        <input type="password" id="password" name="password" placeholder="Password"/>
+        <br/>
+        <br/>
+        <input type="submit" value="Sign in" style="color: white; background-color: dodgerblue;">
+    </form>
+
     <br/>
-    <label for="password">password</label>
-    <input type="password" id="password" name="password" placeholder="password"/>
     <br/>
-    <input type="submit">
-</form>
+    New to Gabiri? <a href="/registration">Sign up</a>
 
 </body>
 </html>

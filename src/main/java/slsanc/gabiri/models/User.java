@@ -2,6 +2,7 @@ package slsanc.gabiri.models;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -18,7 +19,7 @@ public class User {
     @NotNull @NotEmpty
     @Column(name = "last_name") private String lastName;
 
-    @NotNull @NotEmpty
+    @NotNull @NotEmpty @Email(message = "Email is invalid!")
     @Column(name = "email", unique = true) private String email;
 
     @NotNull @NotEmpty

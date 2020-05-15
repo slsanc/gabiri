@@ -2,10 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 
 <head th:fragment="head">
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>Gabiri</title>
-    <script th:src="@{/script.js}"></script>
-    <link th:href="@{/styles.css}" rel="stylesheet">
+    <link th:href="@{/styles.css}" rel="stylesheet"/>
 </head>
 
 <body>
@@ -28,6 +27,7 @@
                 <a th:href="@{/newapplicant}">Enter a New Applicant</a>
             </div>
         </div>
+        <a th:href="@{/registration/logout}" style="float:right;">Log Out</a>
     </div>
 </nav>
 

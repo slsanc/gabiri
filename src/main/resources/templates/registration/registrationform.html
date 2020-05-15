@@ -1,32 +1,37 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
-<body>
+<body style="background-color: gainsboro; text-align: center;">
 <form th:action="@{/registration}" th:object="${newUser}" method="post">
 
     <h1>Register a New User:</h1>
-
-    <label for="firstName">First Name</label>
+    <label for="firstName">First Name:</label>
+    <br/>
     <input type="text" maxlength="20" id="firstName" th:field="${newUser.firstName}" required>
     <br/>
     <br/>
-    <label for="lastName">Last Name</label>
+    <label for="lastName">Last Name:</label>
+    <br/>
     <input type="text" maxlength="30" id="lastName" th:field="${newUser.lastName}" required>
     <br/>
     <br/>
-    <label for="email">Email</label>
+    <label for="email">Email:</label>
+    <br/>
     <input type="email" id="email" maxlength="45" th:field="${newUser.email}" required>
     <br/>
     <br/>
-    <label for="username">Username</label>
+    <label for="username">Username:</label>
+    <br/>
     <input type="text" id="username" maxlength="15" th:field="${newUser.username}" required>
     <br/>
     <br/>
-    <label for="password">Password</label>
+    <label for="password">Password:</label>
+    <br/>
     <input type="password" id="password" maxlength="45" th:field="${newUser.password}" required>
     <br/>
     <br/>
-    <label for="confirmPassword">Confirm Password</label>
+    <label for="confirmPassword">Confirm Password:</label>
+    <br/>
     <input type="password" id="confirmPassword" maxlength="45" name="confirmPassword" required>
     <br/>
     <br/>
