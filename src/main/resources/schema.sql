@@ -35,6 +35,22 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `gabiri`.`Users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `gabiri`.`Users` (
+  `user_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `first_name` VARCHAR(20) NOT NULL,
+  `last_name` VARCHAR(30) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `username` VARCHAR(15) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `gabiri`.`Positions`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `gabiri`.`Positions` (
@@ -49,10 +65,12 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Positions` (
   `start_date` DATE NULL,
   `date_created` DATE NULL,
   `date_filled` DATE NULL,
+  `owner_id` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`position_id`),
   UNIQUE INDEX `position_id_UNIQUE` (`position_id` ASC) VISIBLE,
   INDEX `FK_positions_departments_idx` (`department_id` ASC) VISIBLE,
   INDEX `FK_positions_employment_types_idx` (`employment_type` ASC) VISIBLE,
+  INDEX `FK_positions_users_idx` (`owner_id` ASC) VISIBLE,
   CONSTRAINT `FK_positions_departments`
     FOREIGN KEY (`department_id`)
     REFERENCES `gabiri`.`Departments` (`department_id`)
@@ -62,7 +80,12 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Positions` (
     FOREIGN KEY (`employment_type`)
     REFERENCES `gabiri`.`Employment_Types` (`employment_type_id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_positions_users`
+    FOREIGN KEY (`owner_id`)
+    REFERENCES `gabiri`.`Users` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT)
 ENGINE = InnoDB;
 
 
@@ -81,8 +104,15 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Applicants` (
   `city` VARCHAR(20) NULL,
   `state_or_provence` VARCHAR(2) NULL,
   `hidden_status` TINYINT(1) NULL DEFAULT 0,
+  `owner_id` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`applicant_id`),
-  UNIQUE INDEX `applicant_id_UNIQUE` (`applicant_id` ASC) VISIBLE)
+  UNIQUE INDEX `applicant_id_UNIQUE` (`applicant_id` ASC) VISIBLE,
+  INDEX `FK_Applicants_Users_idx` (`owner_id` ASC) VISIBLE,
+  CONSTRAINT `FK_Applicants_Users`
+    FOREIGN KEY (`owner_id`)
+    REFERENCES `gabiri`.`Users` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT)
 ENGINE = InnoDB;
 
 
@@ -143,22 +173,6 @@ CREATE TABLE IF NOT EXISTS `gabiri`.`Documents` (
     REFERENCES `gabiri`.`Applicants` (`applicant_id`)
     ON DELETE CASCADE
     ON UPDATE RESTRICT)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `gabiri`.`Users`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `gabiri`.`Users` (
-  `user_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(20) NOT NULL,
-  `last_name` VARCHAR(30) NOT NULL,
-  `email` VARCHAR(45) NOT NULL,
-  `username` VARCHAR(15) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`user_id`),
-  UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 

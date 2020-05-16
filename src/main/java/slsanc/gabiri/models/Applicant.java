@@ -17,6 +17,7 @@ public class Applicant {
     @Column(name="city") private String city;
     @Column(name="state_or_provence") private String stateOrProvence;
     @Column(name="hidden_status") private Boolean hiddenStatus;
+    @Column(name="owner_id") private int ownerId;
 
     public int getApplicantId() {
         return applicantId;
@@ -109,6 +110,14 @@ public class Applicant {
     public Applicant(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public int getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
     }
 
     public Applicant() {

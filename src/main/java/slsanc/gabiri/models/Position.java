@@ -19,6 +19,7 @@ public class Position {
     @Column(name="start_date") private Date startDate;
     @Column(name="date_created") private Date dateCreated;
     @Column(name="date_filled") private Date dateFilled;
+    @Column(name="owner_id") private int ownerId;
 
     public int getPositionId() {
         return positionId;
@@ -84,12 +85,12 @@ public class Position {
         this.startDate = startDate;
     }
 
-    public Date getDatePosted() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date datePosted) {
-        this.dateCreated = datePosted;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public Date getDateFilled() {
@@ -98,6 +99,14 @@ public class Position {
 
     public void setDateFilled(Date dateFilled) {
         this.dateFilled = dateFilled;
+    }
+
+    public int getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
     }
 
     public boolean isStillOpen(){

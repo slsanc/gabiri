@@ -14,8 +14,15 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     @Query(value="SELECT * FROM Users WHERE email = :email" , nativeQuery = true)
     User findUserByEmail(@Param("email") String email);
 
+    @Query(value="SELECT user_id FROM Users WHERE username = :username" , nativeQuery = true)
+    int findUserIdByUsername(@Param("username") String username);
+
     @Query(value="SELECT * FROM Users WHERE username = :username" , nativeQuery = true)
     User findUserByUsername(@Param("username") String username);
+
+    @Query(value="SELECT UR.role_id FROM Users U INNER JOIN User_Roles UR ON U.user_id = UR.user_id AND " +
+            "U.username=:username", nativeQuery = true)
+    int findRoleIdByUsername(@Param("username") String username);
 
     @Transactional
     @Modifying

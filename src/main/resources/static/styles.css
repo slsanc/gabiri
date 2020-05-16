@@ -25,6 +25,7 @@ table a, input[type=submit], button{
     border-right: 1px solid black;
     border-bottom: 1px solid black;
     text-decoration: none;
+    white-space: nowrap;
 }
 
 

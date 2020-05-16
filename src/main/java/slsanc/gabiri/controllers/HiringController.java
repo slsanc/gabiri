@@ -7,17 +7,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 import slsanc.gabiri.data.*;
 import slsanc.gabiri.models.*;
-import javax.validation.Valid;
 import java.io.IOException;
+import java.security.Principal;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -36,11 +33,15 @@ public class HiringController {
     @Autowired
     private DocumentRepository documentRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     //</editor-fold>
 
     //<editor-fold desc="Success, Errors and home">
     @GetMapping ("")
-    public String displayIndex(Model model) {
+    public String displayIndex(Model model, Principal principal) {
+        model.addAttribute("firstName", userRepository.findUserByUsername(principal.getName()).getFirstName());
         return "hiring/index";
     }
 
@@ -68,36 +69,54 @@ public class HiringController {
 
 
     @PostMapping("newopenposition")
-    public String processNewPositionForm(@ModelAttribute Position position) {
+    public String processNewPositionForm(@ModelAttribute Position position, Principal principal) {
+        position.setOwnerId(userRepository.findUserIdByUsername(principal.getName()));
         positionRepository.save(position);
         return "redirect:/openpositions";
     }
 
 
     @GetMapping ("openpositions")
-    public String displayPositions(Model model) {
-        /* this next line feeds a list of open positions into the model. */
-        model.addAttribute("positionsList", positionRepository.openPositions());
+    public String displayPositions(Model model, Principal principal) {
+
+
+        /*if a user isn't a super-user, only show them open positions they created. But if they are a super-user, show
+        * them every position in the database:*/
+
+        if(userRepository.findRoleIdByUsername(principal.getName()) != 1){
+            model.addAttribute("positionsList"
+                    , positionRepository.openPositionsThisUserCreated(principal.getName()));
+        }
+        else{
+            model.addAttribute("positionsList", positionRepository.allOpenPositions());
+        }
+
         return "hiring/openpositions";
     }
 
 
     @GetMapping ("/viewposition/{positionId}")
-    public String processPositions(@PathVariable("positionId") int positionId, Model model) {
-        Position position = positionRepository.findById(positionId).get();
-        HashMap<Applicant , Application> applicantsApplicationsHashMap = new HashMap<>();
+    public String processPositions(@PathVariable("positionId") int positionId, Model model, Principal principal) {
+        if(positionRepository.userOwnsThisPosition(principal.getName(), positionId) == 1){
+            Position position = positionRepository.findById(positionId).get();
+            HashMap<Applicant , Application> applicantsApplicationsHashMap = new HashMap<>();
 
-        /*The following loop goes through a list of applications to this position and finds the associated applicant.
-        * It returns the two, linked in a hashmap.*/
-        for(Application a : applicationRepository.findApplicationsByPosition(positionId , position.isStillOpen())){
-            applicantsApplicationsHashMap.put(applicantRepository.findById(a.getApplicantId()).get() , a);
+            /*The following loop goes through a list of applications to this position and finds the associated applicant.
+             * It returns the two, linked in a hashmap.*/
+            for(Application a : applicationRepository.findApplicationsByPosition(positionId , position.isStillOpen())){
+                applicantsApplicationsHashMap.put(applicantRepository.findById(a.getApplicantId()).get() , a);
+            }
+
+            model.addAttribute("applicantsApplicationsHashMap", applicantsApplicationsHashMap);
+            model.addAttribute("position",position);
+            model.addAttribute("application",new Application());
+
+            return "hiring/viewposition";
+        }
+        else{
+            return "redirect:/openpositions";
         }
 
-        model.addAttribute("applicantsApplicationsHashMap", applicantsApplicationsHashMap);
-        model.addAttribute("position",position);
-        model.addAttribute("application",new Application());
-
-        return "hiring/viewposition";
     }
 
     @PostMapping ("deleteposition")
@@ -109,14 +128,19 @@ public class HiringController {
     @GetMapping ("considernewapplicants/{positionId}")
     /* This bit handles when the user clicks "consider new applicants for this position"
     while viewing an open position's page.*/
-    public String processConsiderNewApplicants(@PathVariable int positionId, Model model) {
+    public String processConsiderNewApplicants(@PathVariable int positionId, Model model, Principal principal) {
 
-        model.addAttribute("applicantsNotYetConsidered", applicantRepository.applicantsNotYetConsidered(positionId));
-        model.addAttribute("idList", new IdList(positionId));
+        if(positionRepository.userOwnsThisPosition(principal.getName(), positionId) == 1){
+            model.addAttribute("applicantsNotYetConsidered"
+                    , applicantRepository.applicantsNotYetConsidered(positionId));
+            model.addAttribute("idList", new IdList(positionId));
 
-        return "hiring/considernewapplicants";
+            return "hiring/considernewapplicants";
+        }
+        else{
+            return "redirect:/openpositions";
+        }
     }
-
 
     @PostMapping ("addapplicanttoposition")
     /* This bit handles when the user clicks "add selected applicants to position" */
@@ -182,15 +206,27 @@ public class HiringController {
 
 
     @GetMapping ("filledpositions")
-    public String displayFilledPositions(Model model){
+    public String displayFilledPositions(Model model , Principal principal){
 
-        HashMap<Position , Applicant> positionApplicantHashMap = new HashMap<>();
+        List<Position> filledPositionsList;
         Applicant applicant;
+        HashMap<Position , Applicant> positionApplicantHashMap = new HashMap<>();
 
-        for (Position position : positionRepository.filledPositions())
+        /*if a user isn't a super-user, only show them filled positions they created. But if they are a super-user, show
+         * them every filled position in the database:*/
+
+        if(userRepository.findRoleIdByUsername(principal.getName()) != 1)
         {
-            applicant = applicantRepository.applicantHiredFor(position.getPositionId());
-            positionApplicantHashMap.put(position,applicant);
+            filledPositionsList = positionRepository.filledPositionsThisUserCreated(principal.getName());
+        }
+        else {
+            filledPositionsList = positionRepository.allFilledPositions();
+        }
+
+        /*Create a HashMap where each position is connected to the applicant who was hired for it:*/
+        for (Position position : filledPositionsList)
+        {
+            positionApplicantHashMap.put(position, applicantRepository.applicantHiredFor(position.getPositionId()));
         }
 
         model.addAttribute("positionApplicantHashMap",positionApplicantHashMap);
@@ -208,8 +244,10 @@ public class HiringController {
 
 
     @PostMapping("newapplicant")
-    public String processNewApplicantForm(@ModelAttribute Applicant applicant,
-                                          @RequestParam MultipartFile[] files) {
+    public String processNewApplicantForm(@ModelAttribute Applicant applicant, @RequestParam MultipartFile[] files
+            , Principal principal) {
+
+        applicant.setOwnerId(userRepository.findUserIdByUsername(principal.getName()));
         applicantRepository.save(applicant);
 
         for(MultipartFile file:files) {
@@ -228,37 +266,59 @@ public class HiringController {
 
 
     @GetMapping ("availableapplicants")
-    public String displayApplicants(Model model) {
-        model.addAttribute("applicantsList", applicantRepository.availableApplicants());
+    public String displayApplicants(Model model, Principal principal) {
+
+        List<Applicant> applicantsList;
+
+        if(userRepository.findRoleIdByUsername(principal.getName()) != 1)
+        {
+            applicantsList = applicantRepository.availableApplicantsThisUserCreated(principal.getName());
+        }
+        else {
+            applicantsList = applicantRepository.allAvailableApplicants();
+        }
+
+        model.addAttribute("applicantsList", applicantsList);
         return "hiring/availableapplicants";
     }
 
 
     @GetMapping ("viewapplicant/{applicantId}")
-    public String processApplicants(@PathVariable("applicantId") int applicantId, Model model){
+    public String processApplicants(@PathVariable("applicantId") int applicantId, Model model, Principal principal){
 
-        HashMap<Position,Application>positionApplicationHashMap = new HashMap<>();
+        if(applicantRepository.userOwnsThisApplicant(principal.getName(), applicantId) == 1){
+            HashMap<Position,Application>positionApplicationHashMap = new HashMap<>();
 
-        for(Position position: positionRepository.positionsAppliedTo(applicantId)){
-            positionApplicationHashMap.put(position, applicationRepository.findApplicationByPositionAndApplicant
-                    (position.getPositionId() , applicantId));
+            for(Position position: positionRepository.positionsAppliedTo(applicantId)){
+                positionApplicationHashMap.put(position, applicationRepository.findApplicationByPositionAndApplicant
+                        (position.getPositionId() , applicantId));
+            }
+
+
+            model.addAttribute("applicant" , applicantRepository.findById(applicantId).get());
+            model.addAttribute("positionApplicationHashMap", positionApplicationHashMap);
+            model.addAttribute("documentIdsAndNames"
+                    , documentRepository.thisApplicantsDocumentIdsAndNames(applicantId));
+
+            return "/hiring/viewapplicant";
+        }
+        else{
+            return "redirect:/availableapplicants";
         }
 
-
-        model.addAttribute("applicant" , applicantRepository.findById(applicantId).get());
-        model.addAttribute("positionApplicationHashMap", positionApplicationHashMap);
-        model.addAttribute("documentIdsAndNames"
-                , documentRepository.thisApplicantsDocumentIdsAndNames(applicantId));
-
-        return "/hiring/viewapplicant";
     }
 
     @GetMapping ("considernewpositions/{applicantId}")
-    public String considerNewPositions(@PathVariable int applicantId , Model model){
-        IdList idList = new IdList(applicantId);
-        model.addAttribute("idList" , idList);
-        model.addAttribute("positionsNotYetAppliedTo" , positionRepository.positionsNotYetAppliedTo(applicantId));
-        return "/hiring/considernewpositions";
+    public String considerNewPositions(@PathVariable int applicantId , Model model, Principal principal){
+        if(applicantRepository.userOwnsThisApplicant(principal.getName(), applicantId) == 1){
+            IdList idList = new IdList(applicantId);
+            model.addAttribute("idList" , idList);
+            model.addAttribute("positionsNotYetAppliedTo" , positionRepository.positionsNotYetAppliedTo(applicantId));
+            return "/hiring/considernewpositions";
+        }
+        else{
+            return "redirect:/availableapplicants";
+        }
     }
 
     @PostMapping ("addpositiontoapplicant")

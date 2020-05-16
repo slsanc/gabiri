@@ -4,7 +4,7 @@
 <body>
 <nav th:replace="fragments :: hiringHeader"></nav>
 
-<h1>Welcome to Gabiri Hiring Manager!</h1>
+<h1 th:text="|Welcome to Gabiri Hiring Manager, ${firstName}!|">Welcome to Gabiri Hiring Manager!</h1>
 
 </body>
 </html>

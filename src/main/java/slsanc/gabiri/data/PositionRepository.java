@@ -15,13 +15,25 @@ import java.util.List;
 @Repository
 public interface PositionRepository extends JpaRepository<Position,Integer> {
 
-    @Query(value = "SELECT * FROM Positions WHERE date_filled IS NULL ORDER BY date_created DESC" , nativeQuery = true)
-    List<Position> openPositions();
+    @Query(value = "SELECT * FROM Positions WHERE date_filled IS NULL", nativeQuery = true)
+    List<Position> allOpenPositions();
+
+    @Query(value = "SELECT P.* FROM Positions P INNER JOIN Users U " +
+            "ON U.username = :username AND  P.owner_id=U.user_id "+
+            "WHERE date_filled IS NULL ORDER BY date_created DESC"
+            , nativeQuery = true)
+    List<Position> openPositionsThisUserCreated(@Param("username") String username);
 
 
     @Query(value = "SELECT * FROM Positions WHERE date_filled IS NOT NULL ORDER BY date_filled DESC"
             , nativeQuery = true)
-    List<Position> filledPositions();
+    List<Position> allFilledPositions();
+
+    @Query(value = "SELECT P.* FROM Positions P INNER JOIN Users U " +
+            "ON U.username = :username AND  P.owner_id=U.user_id "+
+            "WHERE date_filled IS NOT NULL ORDER BY date_created DESC"
+            , nativeQuery = true)
+    List<Position> filledPositionsThisUserCreated(@Param("username") String username);
 
 
     @Transactional @Modifying @Query(value="UPDATE Positions SET date_filled = :now WHERE position_id = :positionId"
@@ -39,8 +51,18 @@ public interface PositionRepository extends JpaRepository<Position,Integer> {
             , nativeQuery = true)
     void deletePositionsThisApplicantWasHiredFor(@Param("applicantId") int applicantId);
 
-    @Query(value="SELECT * FROM POSITIONS WHERE position_id NOT IN " +
-            "(SELECT position_id FROM APPLICATIONS WHERE applicant_id = :applicantId)" , nativeQuery = true)
+    @Query(value="SELECT P1.* FROM Applications N RIGHT JOIN Positions P1 " +
+            "ON N.applicant_id = :applicantId AND N.position_id = P1.position_id " +
+            "RIGHT JOIN Applicants A " +
+            "ON A.applicant_id = :applicantId AND P1.owner_id = A.owner_id " +
+            "WHERE N.position_id IS NULL AND P1.position_id IS NOT NULL"
+            , nativeQuery = true)
     List<Position> positionsNotYetAppliedTo(@Param("applicantId") int applicantId);
+
+
+    /*The following returns 1 if the user owns the position, and 0 if the user does not own the position.*/
+    @Query(value="SELECT COUNT(*) FROM Users U INNER JOIN Positions P " +
+            "ON U.username = :username AND P.position_id = :positionId AND U.user_id = P.owner_id" , nativeQuery = true)
+    int userOwnsThisPosition(@Param("username") String username, @Param("positionId") int positionId);
 
 }
