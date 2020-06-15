@@ -1,6 +1,6 @@
 # Gabiri
 
-Gabiri is a hiring management software. **It is currently in pre-alpha and is not yet finished.**
+Gabiri is a hiring management software.
 Gabiri is Sumerian for "mountain".
 
 ## Features
