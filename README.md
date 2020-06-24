@@ -42,7 +42,7 @@ To run this application, you will need MySQL running.
 
 ## License
 
-This project is licensed under the GNU General Public License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU General Public License - see the LICENSE file for details
 
 ## Screenshots
 
