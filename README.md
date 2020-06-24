@@ -40,6 +40,10 @@ To run this application, you will need MySQL running.
 * [MySQL](https://www.mysql.com/) - The database system used
 * [ThymeLeaf](https://www.thymeleaf.org/) - a template engine for the view layer.
 
+## License
+
+This project is licensed under the GNU General Public License - see the [LICENSE.md](LICENSE.md) file for details
+
 ## Screenshots
 
 ![](screenshots/login.png)
